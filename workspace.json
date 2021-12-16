@@ -1,4 +1,7 @@
 {
-  "version": 2,
-  "projects": {}
+	"version": 2,
+	"projects": {
+		"client": "packages/client",
+		"grammar": "packages/grammar"
+	}
 }

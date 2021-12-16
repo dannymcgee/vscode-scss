@@ -1,0 +1,15 @@
+{
+	"root": "packages/grammar",
+	"sourceRoot": "packages/grammar/src",
+	"projectType": "library",
+	"targets": {
+		"build": {
+			"executor": "@vscode-devkit/nx:grammar",
+			"options": {
+				"name": "scss",
+				"entryPoint": "packages/grammar/src/index.ts",
+				"outputPath": "dist/vscode-scss"
+			}
+		}
+	}
+}

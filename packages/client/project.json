@@ -1,0 +1,19 @@
+{
+	"root": "packages/client",
+	"sourceRoot": "packages/client/src",
+	"projectType": "application",
+	"targets": {
+		"build": {
+			"executor": "@vscode-devkit/nx:build",
+			"options": {
+				"additionalTargets": ["grammar:build"],
+				"assets": ["package.json"],
+				"entryPoint": "src/index.ts",
+				"outputPath": "dist/vscode-scss",
+				"outputFile": "main.js",
+				"package": true,
+				"install": true
+			}
+		}
+	}
+}
