@@ -12,7 +12,8 @@
 				"assets": [
 					"package.json",
 					"README.md",
-					"LICENSE"
+					"LICENSE",
+					"icon.png"
 				],
 				"entryPoint": "src/index.ts",
 				"outputPath": "dist/vscode-scss",
