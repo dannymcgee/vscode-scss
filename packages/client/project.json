@@ -22,5 +22,6 @@
 				"install": true
 			}
 		}
-	}
+	},
+	"implicitDependencies": ["grammar"]
 }

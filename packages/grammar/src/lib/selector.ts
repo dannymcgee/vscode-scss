@@ -9,24 +9,32 @@ export const selector: TMGrammarScope = {
 			name: "meta.selector.class.scss",
 			match: regex`/(\.)(${IDENT})/`,
 			captures: {
+				0: { name: "entity.other.attribute-name.class.css" },
 				1: { name: "punctuation.definition.entity.scss" },
-				2: { name: "entity.other.attribute-name.class.css" },
 			},
+		},
+		{
+			name: "meta.selector.id.scss",
+			match: regex`/(#)(${IDENT})/`,
+			captures: {
+				0: { name: "entity.other.attribute-name.id.scss" },
+				1: { name: "punctuation.definition.entity.scss" },
+			}
 		},
 		{
 			name: "meta.selector.pseudo-element.scss",
 			match: regex`/(::)(${IDENT})/`,
 			captures: {
+				0: { name: "entity.other.attribute-name.pseudo-element.css" },
 				1: { name: "punctuation.definition.entity.scss" },
-				2: { name: "entity.other.attribute-name.pseudo-element.css" },
 			},
 		},
 		{
 			name: "meta.selector.pseudo-class.scss",
 			match: regex`/(:)(${IDENT})/`,
 			captures: {
+				0: { name: "entity.other.attribute-name.pseudo-class.css" },
 				1: { name: "punctuation.definition.entity.scss" },
-				2: { name: "entity.other.attribute-name.pseudo-class.css" },
 			},
 		},
 		{
