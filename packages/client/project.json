@@ -6,8 +6,14 @@
 		"build": {
 			"executor": "@vscode-devkit/nx:build",
 			"options": {
-				"additionalTargets": ["grammar:build"],
-				"assets": ["package.json"],
+				"additionalTargets": [
+					"grammar:build"
+				],
+				"assets": [
+					"package.json",
+					"README.md",
+					"LICENSE"
+				],
 				"entryPoint": "src/index.ts",
 				"outputPath": "dist/vscode-scss",
 				"outputFile": "main.js",

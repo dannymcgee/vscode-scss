@@ -4,7 +4,6 @@
 	"license": "MIT",
 	"scripts": {},
 	"private": true,
-	"dependencies": {},
 	"devDependencies": {
 		"@nrwl/cli": "13.3.6",
 		"@nrwl/tao": "13.3.6",
@@ -14,6 +13,7 @@
 		"@vscode-devkit/nx": "0.0.1",
 		"esbuild": "^0.14.5",
 		"prettier": "^2.3.1",
-		"typescript": "~4.4.3"
+		"typescript": "~4.4.3",
+		"vsce": "^2.9.1"
 	}
 }
