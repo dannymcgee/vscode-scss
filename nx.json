@@ -1,6 +1,6 @@
 {
 	"extends": "nx/presets/npm.json",
-	"npmScope": "scss",
+	"npmScope": "sassy",
 	"affected": {
 		"defaultBase": "main"
 	},
@@ -14,5 +14,6 @@
 				"cacheableOperations": ["build", "lint", "test", "e2e"]
 			}
 		}
-	}
+	},
+	"defaultProject": "client"
 }

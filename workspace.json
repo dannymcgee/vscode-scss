@@ -2,6 +2,7 @@
 	"version": 2,
 	"projects": {
 		"client": "packages/client",
-		"grammar": "packages/grammar"
+		"grammar": "packages/grammar",
+		"parser": "packages/parser"
 	}
 }
