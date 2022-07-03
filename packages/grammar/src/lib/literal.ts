@@ -13,6 +13,7 @@ export const literal: TMGrammarScope = {
 				1: { name: "punctuation.definition.string.end.scss" },
 				2: { name: "punctuation.definition.string.end.scss" },
 			},
+			patterns: [{ include: "#interpolation" }],
 		},
 		{
 			name: "string.scss",
@@ -25,6 +26,7 @@ export const literal: TMGrammarScope = {
 				1: { name: "punctuation.definition.string.end.scss" },
 				2: { name: "punctuation.definition.string.end.scss" },
 			},
+			patterns: [{ include: "#interpolation" }],
 		},
 		{
 			match: /(-?(?:\.?[0-9]+|[0-9]+[.0-9]*))(px|pt|pc|%|fr|cm|mm|Q|in|r?em|ex|ch|lh|vw|vh|vmin|vmax|m?s)?/,
