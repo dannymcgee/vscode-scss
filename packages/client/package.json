@@ -2,7 +2,7 @@
 	"name": "vscode-scss-lang",
 	"displayName": "SCSS Language Support",
 	"description": "Rich language support for SCSS",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"author": "Danny McGee <dannymcgee@gmail.com>",
 	"publisher": "dannymcgee",
 	"license": "MIT",
