@@ -16,11 +16,23 @@
 		"url": "https://github.com/dannymcgee/vscode-scss"
 	},
 	"contributes": {
+		"languages": [
+			{
+				"id": "scss-parser-snap",
+				"aliases": ["SCSS Parser Snapshot"],
+				"extensions": [".parser-snap"]
+			}
+		],
 		"grammars": [
 			{
 				"language": "scss",
 				"scopeName": "source.scss",
 				"path": "./scss.tmLanguage.json"
+			},
+			{
+				"language": "scss-parser-snap",
+				"scopeName": "source.parser-snap",
+				"path": "./parser-snap.tmLanguage.json"
 			}
 		]
 	}

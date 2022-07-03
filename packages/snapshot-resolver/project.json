@@ -1,0 +1,33 @@
+{
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "packages/snapshot-resolver/src",
+	"projectType": "library",
+	"targets": {
+		"build": {
+			"executor": "@nrwl/js:swc",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/@sassy/snapshot-resolver",
+				"main": "packages/snapshot-resolver/src/index.ts",
+				"tsConfig": "packages/snapshot-resolver/tsconfig.lib.json",
+				"assets": ["packages/snapshot-resolver/*.md"]
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["packages/snapshot-resolver/**/*.ts"]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/packages/snapshot-resolver"],
+			"options": {
+				"jestConfig": "packages/snapshot-resolver/jest.config.ts",
+				"passWithNoTests": true
+			}
+		}
+	},
+	"tags": []
+}

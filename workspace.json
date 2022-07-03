@@ -3,6 +3,10 @@
 	"projects": {
 		"client": "packages/client",
 		"grammar": "packages/grammar",
-		"parser": "packages/parser"
+		"parser": "packages/parser",
+		"parser-snap-grammar": "packages/parser-snap-grammar",
+		"snapshot-resolver": "packages/snapshot-resolver",
+		"testing": "packages/testing",
+		"util": "packages/util"
 	}
 }

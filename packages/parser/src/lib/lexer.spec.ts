@@ -1,7 +1,127 @@
-import { lexer } from "./lexer";
+import { Lexer } from "./lexer";
+import { COARSE_MATCHERS, FINE_MATCHERS }  from "./matchers";
 
-describe("lexer", () => {
-	it("should work", () => {
-		expect(lexer()).toEqual("lexer");
+const INPUT = `
+@use "sass:math";
+
+@use "./elx/a11y" as *;
+@use "./elx/layout";
+@use "./elx/style/color";
+@use "./elx/style/scrollbar" as *;
+@use "./elx/style/type";
+
+@import "~@angular/cdk/overlay-prebuilt.css";
+
+:root {
+	--recursive-mono: 0.51;
+	--recursive-casual: 0;
+	--recursive-weight: 500;
+	--recursive-slant: 0;
+	--recursive-cursive: 0;
+}
+
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
+html, body, #root {
+	height: 100%;
+}
+
+body {
+	@include layout.flex(column);
+	margin: 0;
+	padding: 0;
+	background-color: transparent;
+	color: color.foreground();
+	font-family: var(--global-font-family);
+	@include scrollbar(200);
+}
+
+h1 { @include type.h1; }
+h2 { @include type.h2; }
+h3 { @include type.h3; }
+h4 { @include type.h4; }
+h1, h2, h3, h4 {
+	line-height: 1;
+}
+
+p {
+	margin: 0 0 rem(16);
+	line-height: 1.4;
+}
+
+button {
+	padding: 0;
+	background: transparent;
+	border: none;
+	border-radius: 0;
+	appearance: none;
+	font: inherit;
+	color: inherit;
+
+	&:focus {
+		outline: none;
+	}
+}
+
+input,
+textarea {
+	appearance: none;
+	outline: none !important;
+	border: none;
+}
+
+input:not([type="text"]),
+button,
+label {
+	user-select: none;
+}
+
+.row {
+	display: flex;
+	width: calc(100% + #{rem(64)});
+	margin-right: rem(-32);
+	margin-left: rem(-32);
+}
+
+.col {
+	padding: 0 rem(32);
+
+	@for $i from 1 through 12 {
+		&--#{$i} {
+			$width: 100% * math.div($i, 12);
+			flex: 0 0 $width;
+			width: $width;
+		}
+	}
+
+	@for $i from 1 through 10 {
+		&--w-#{$i * 10} {
+			$width: $i * 10%;
+			flex: 0 0 $width;
+			width: $width;
+		}
+	}
+}
+`;
+
+describe("Lexer", () => {
+	test("with coarse matchers", () => {
+		const lexer = new Lexer(COARSE_MATCHERS);
+		lexer.load(INPUT);
+
+		const tokens = lexer.scanAll();
+
+		expect(tokens).toMatchSnapshot();
+	});
+
+	test("with fine matchers", () => {
+		const lexer = new Lexer(FINE_MATCHERS);
+		lexer.load(INPUT);
+
+		const tokens = lexer.scanAll();
+
+		expect(tokens).toMatchSnapshot();
 	});
 });

@@ -7,13 +7,11 @@ const { exclude: _, ...swcJestConfig } = JSON.parse(
 	readFileSync(`${__dirname}/.lib.swcrc`, "utf-8")
 );
 export default {
-	displayName: "parser",
+	displayName: "testing",
 	preset: "../../jest.preset.js",
 	transform: {
 		"^.+\\.[tj]s$": ["@swc/jest", swcJestConfig],
 	},
-	snapshotResolver: "@sassy/snapshot-resolver",
-	setupFilesAfterEnv: ["./jest-setup.ts"],
 	moduleFileExtensions: ["ts", "js", "html"],
-	coverageDirectory: "../../coverage/packages/parser",
+	coverageDirectory: "../../coverage/packages/testing",
 };

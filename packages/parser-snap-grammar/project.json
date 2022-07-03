@@ -1,0 +1,15 @@
+{
+	"root": "packages/parser-snap-grammar",
+	"sourceRoot": "packages/parser-snap-grammar/src",
+	"projectType": "library",
+	"targets": {
+		"build": {
+			"executor": "@vscode-devkit/nx:grammar",
+			"options": {
+				"name": "parser-snap",
+				"entryPoint": "packages/parser-snap-grammar/src/index.ts",
+				"outputPath": "dist/vscode-scss"
+			}
+		}
+	}
+}

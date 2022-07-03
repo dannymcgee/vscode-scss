@@ -4,6 +4,16 @@
 	"plugins": ["@nrwl/nx"],
 	"overrides": [
 		{
+			"files": ["*.ts", "*.tsx"],
+			"extends": ["plugin:@nrwl/nx/typescript"],
+			"rules": {}
+		},
+		{
+			"files": ["*.js", "*.jsx"],
+			"extends": ["plugin:@nrwl/nx/javascript"],
+			"rules": {}
+		},
+		{
 			"files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
 			"rules": {
 				"@nrwl/nx/enforce-module-boundaries": [
@@ -18,18 +28,16 @@
 							}
 						]
 					}
+				],
+				"@typescript-eslint/no-non-null-assertion": "off",
+				"@typescript-eslint/no-unused-vars": [
+					"warn",
+					{
+						"varsIgnorePattern": "^_",
+						"argsIgnorePattern": "^_"
+					}
 				]
 			}
-		},
-		{
-			"files": ["*.ts", "*.tsx"],
-			"extends": ["plugin:@nrwl/nx/typescript"],
-			"rules": {}
-		},
-		{
-			"files": ["*.js", "*.jsx"],
-			"extends": ["plugin:@nrwl/nx/javascript"],
-			"rules": {}
 		}
 	]
 }

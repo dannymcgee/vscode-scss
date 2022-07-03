@@ -3,7 +3,8 @@
 	"version": "0.0.0",
 	"license": "MIT",
 	"scripts": {
-		"test": "nx run-many --target test --all"
+		"postinstall": "ts-node --project \"./tools/tsconfig.tools.json\" \"./tools/scripts/postinstall.ts\"",
+		"test": "nx run-many --target test --all --skip-nx-cache --verbose"
 	},
 	"private": true,
 	"devDependencies": {
@@ -15,6 +16,7 @@
 		"@nrwl/workspace": "14.4.0",
 		"@swc/cli": "~0.1.55",
 		"@swc/core": "^1.2.173",
+		"@swc/helpers": "^0.4.3",
 		"@swc/jest": "0.2.20",
 		"@types/jest": "27.4.1",
 		"@types/node": "14.14.33",
