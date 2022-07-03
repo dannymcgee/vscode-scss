@@ -24,16 +24,19 @@ export const styleRule: TMGrammarScope = {
 	name: "meta.rule.scss",
 	patterns: [
 		{
-			begin: regex`/(${IDENT})(:)/`,
+			begin: regex`/(${IDENT})\s*(:)/`,
 			beginCaptures: {
 				1: { name: "support.type.property-name.scss" },
 				2: { name: "punctuation.separator.key-value.scss" },
 			},
-			end: /(;)|(?=\})/,
+			end: /(;)|(?=[{}])/,
 			endCaptures: {
 				1: { name: "punctuation.terminator.scss" },
 			},
-			patterns: [{ include: "#value" }],
+			patterns: [
+				{ include: "#ruleBlock" },
+				{ include: "#value" },
+			],
 		},
 		{ include: "#selector" },
 		{
