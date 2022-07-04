@@ -41,9 +41,9 @@ export class Token {
 	static NullLiteral: TokenType;
 
 	@token(re.merge(
-		/#[a-fA-F0-9]{3,4}/,
-		/#[a-fA-F0-9]{6}/,
 		/#[a-fA-F0-9]{8}/,
+		/#[a-fA-F0-9]{6}/,
+		/#[a-fA-F0-9]{3,4}/,
 		re`/\b(?:${ALL_COLORS.join("|")})\b/`,
 	))
 	static ColorLiteral: TokenType;
