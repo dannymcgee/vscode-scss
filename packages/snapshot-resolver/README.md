@@ -1,11 +1,5 @@
-# snapshot-resolver
+# `@sassy/snapshot-resolver`
 
-This library was generated with [Nx](https://nx.dev).
-
-## Building
-
-Run `nx build snapshot-resolver` to build the library.
-
-## Running unit tests
-
-Run `nx test snapshot-resolver` to execute the unit tests via [Jest](https://jestjs.io).
+This is a [Jest Snapshot Resolver](https://jestjs.io/docs/configuration#snapshotresolver-string)
+which makes the grammar in `libs/parser-snap-grammar` work by giving snapshots a
+different filename depending on the package they're generated from.

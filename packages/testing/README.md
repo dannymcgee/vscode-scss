@@ -1,11 +1,5 @@
-# testing
+# `@sassy/testing`
 
-This library was generated with [Nx](https://nx.dev).
-
-## Building
-
-Run `nx build testing` to build the library.
-
-## Running unit tests
-
-Run `nx test testing` to execute the unit tests via [Jest](https://jestjs.io).
+Library of testing utilities. Currently home to custom snapshot serializers for
+Lexer results and Tokens. Will eventually include snapshot serializers for the
+parser AST/CST structures and anything else that might be handy for testing.

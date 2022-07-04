@@ -3,6 +3,7 @@
 	"version": "0.0.0",
 	"license": "MIT",
 	"scripts": {
+		"build": "nx build",
 		"postinstall": "ts-node --project \"./tools/tsconfig.tools.json\" \"./tools/scripts/postinstall.ts\"",
 		"test": "nx run-many --target test --all --skip-nx-cache --verbose"
 	},

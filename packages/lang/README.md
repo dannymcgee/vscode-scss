@@ -1,11 +1,9 @@
-# lang
+# `@sassy/lang`
 
-This library was generated with [Nx](https://nx.dev).
+This is the core library for language tooling (parser, lexer, diagnostics, etc).
 
-## Building
-
-Run `nx build lang` to build the library.
-
-## Running unit tests
-
-Run `nx test lang` to execute the unit tests via [Jest](https://jestjs.io).
+```sh
+> nx test lang   # Run unit tests
+> nx lint lang   # Lint
+> nx build lang  # Build
+```
