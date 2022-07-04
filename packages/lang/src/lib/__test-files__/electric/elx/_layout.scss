@@ -1,0 +1,80 @@
+@use "sass:list";
+
+///
+/// Shorthand for `display: flex` setup
+///
+/// @param $dir flex-direction
+/// @param $a align-items
+/// @param $j justify-content
+///
+@mixin flex($dir: null, $a: null, $j: null) {
+	@include _flex(flex, $dir, $a, $j);
+}
+
+///
+/// Shorthand for `display: inline-flex` setup
+///
+/// @param $dir flex-direction
+/// @param $a align-items
+/// @param $j justify-content
+///
+@mixin inline-flex($dir: null, $a: null, $j: null) {
+	@include _flex(inline-flex, $dir, $a, $j);
+}
+
+@mixin _flex($type, $dir: null, $a: null, $j: null) {
+	display: $type;
+	@if $dir != null {
+		flex-direction: $direction;
+	}
+	@if $a != null {
+		align-items: $a;
+	}
+	@if $j != null {
+		justify-content: $j;
+	}
+}
+
+@mixin relative($top: null, $right: null, $bottom: null, $left: null) {
+	@include _position(relative, ($top $right $bottom $left));
+}
+
+@mixin absolute($top: null, $right: null, $bottom: null, $left: null) {
+	@include _position(absolute, ($top $right $bottom $left));
+}
+
+@mixin fixed($top: null, $right: null, $bottom: null, $left: null) {
+	@include _position(fixed, ($top $right $bottom $left));
+}
+
+@mixin sticky($top: null, $right: null, $bottom: null, $left: null) {
+	@include _position(fixed, ($top $right $bottom $left));
+}
+
+@mixin _position(
+	$type,
+	$positions: (
+		$top: null,
+		$right: null,
+		$bottom: null,
+		$left: null
+	)
+) {
+	position: $type;
+	$side-props: (top right bottom left);
+
+	@for $i from 1 through 4 {
+		$key: list.nth($side-props, $i);
+		$val: list.nth($positions, $i);
+
+		@if $val != null {
+			#{$key}: $val;
+		}
+	}
+}
+
+@mixin circle($radius) {
+	width: $radius * 2;
+	height: $radius * 2;
+	border-radius: $radius;
+}

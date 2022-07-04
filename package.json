@@ -37,6 +37,7 @@
 	},
 	"dependencies": {
 		"@swc/helpers": "~0.3.3",
+		"chevrotain": "^10.1.2",
 		"tslib": "^2.3.0"
 	}
 }

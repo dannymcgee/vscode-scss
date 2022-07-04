@@ -1,1 +1,1 @@
-export { LexResultSerializer, TokenSerializer } from "./lib/snapshot-serializers";
+export * from "./lib/snapshot-serializers";

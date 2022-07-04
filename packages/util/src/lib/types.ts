@@ -2,6 +2,10 @@ export interface Fn<Params extends unknown[] = [], R = void> {
 	(...params: Params): R;
 }
 
+export interface AsyncFn<Params extends unknown[] = [], R = void> {
+	(...params: Params): Promise<R>;
+}
+
 export type Const<T>
 	= T extends Array<infer U>        ? readonly Const<U>[]
 	: T extends Map<infer K, infer U> ? ReadonlyMap<K, Const<U>>

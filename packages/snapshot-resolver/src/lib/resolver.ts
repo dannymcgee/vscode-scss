@@ -29,5 +29,9 @@ function getSnapshotExtension(pathName: Config.Path): string {
 
 	if (!packageMatch) return ".snap";
 
-	return `.${packageMatch[1]}-snap`;
+	const [, pkg] = packageMatch;
+	if (pkg === "parser" || pkg === "lang") {
+		return `.parser-snap`;
+	}
+	return `.${pkg}-snap`;
 }

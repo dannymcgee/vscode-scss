@@ -15,7 +15,7 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
-			"@sassy/parser": ["packages/parser/src/index.ts"],
+			"@sassy/lang": ["packages/lang/src/index.ts"],
 			"@sassy/snapshot-resolver": ["packages/snapshot-resolver/src/index.ts"],
 			"@sassy/testing": ["packages/testing/src/index.ts"],
 			"@sassy/util": ["packages/util/src/index.ts"]

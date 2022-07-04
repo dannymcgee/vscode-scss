@@ -1,22 +1,22 @@
 {
 	"$schema": "../../node_modules/nx/schemas/project-schema.json",
-	"sourceRoot": "packages/parser/src",
+	"sourceRoot": "packages/lang/src",
 	"projectType": "library",
 	"targets": {
 		"build": {
 			"executor": "@nrwl/js:swc",
 			"outputs": ["{options.outputPath}"],
 			"options": {
-				"outputPath": "dist/packages/parser",
-				"main": "packages/parser/src/index.ts",
-				"tsConfig": "packages/parser/tsconfig.lib.json",
-				"assets": ["packages/parser/*.md"]
+				"outputPath": "dist/packages/lang",
+				"main": "packages/lang/src/index.ts",
+				"tsConfig": "packages/lang/tsconfig.lib.json",
+				"assets": ["packages/lang/*.md"]
 			}
 		},
 		"publish": {
 			"executor": "@nrwl/workspace:run-commands",
 			"options": {
-				"command": "node tools/scripts/publish.mjs parser {args.ver} {args.tag}"
+				"command": "node tools/scripts/publish.mjs lang {args.ver} {args.tag}"
 			},
 			"dependsOn": [
 				{
@@ -29,14 +29,14 @@
 			"executor": "@nrwl/linter:eslint",
 			"outputs": ["{options.outputFile}"],
 			"options": {
-				"lintFilePatterns": ["packages/parser/**/*.ts"]
+				"lintFilePatterns": ["packages/lang/**/*.ts"]
 			}
 		},
 		"test": {
 			"executor": "@nrwl/jest:jest",
-			"outputs": ["coverage/packages/parser"],
+			"outputs": ["coverage/packages/lang"],
 			"options": {
-				"jestConfig": "packages/parser/jest.config.ts",
+				"jestConfig": "packages/lang/jest.config.ts",
 				"passWithNoTests": true
 			}
 		}

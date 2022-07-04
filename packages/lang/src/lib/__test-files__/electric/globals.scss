@@ -1,7 +1,3 @@
-import { Lexer } from "./lexer";
-import { COARSE_MATCHERS, FINE_MATCHERS }  from "./matchers";
-
-const INPUT = `
 @use "sass:math";
 
 @use "./elx/a11y" as *;
@@ -104,24 +100,3 @@ label {
 		}
 	}
 }
-`;
-
-describe("Lexer", () => {
-	test("with coarse matchers", () => {
-		const lexer = new Lexer(COARSE_MATCHERS);
-		lexer.load(INPUT);
-
-		const tokens = lexer.scanAll();
-
-		expect(tokens).toMatchSnapshot();
-	});
-
-	test("with fine matchers", () => {
-		const lexer = new Lexer(FINE_MATCHERS);
-		lexer.load(INPUT);
-
-		const tokens = lexer.scanAll();
-
-		expect(tokens).toMatchSnapshot();
-	});
-});
