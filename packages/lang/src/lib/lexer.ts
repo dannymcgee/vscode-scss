@@ -25,7 +25,7 @@ export class Token {
 	static Ident: TokenType;
 
 	// TODO: These are only keywords in certain contexts
-	@token(re`/(if|else|from|through|to|in|as|and|or)${WB}/`, { longer_alt: Token.Ident })
+	@token(re`/(if|else|from|through|to|in|as)${WB}/`, { longer_alt: Token.Ident })
 	static Keyword: TokenType;
 
 	@token(re`/(and)${WB}/`, { longer_alt: Token.Ident })
@@ -50,6 +50,57 @@ export class Token {
 
 	@token(re`/@(${IDENT})/`)
 	static AtWord: TokenType;
+
+	@token(/@use/, { longer_alt: Token.AtWord })
+	static AtUse: TokenType;
+
+	@token(/@forward/, { longer_alt: Token.AtWord })
+	static AtForward: TokenType;
+
+	@token(/@import/, { longer_alt: Token.AtWord })
+	static AtImport: TokenType;
+
+	@token(/@mixin/, { longer_alt: Token.AtWord })
+	static AtMixin: TokenType;
+
+	@token(/@include/, { longer_alt: Token.AtWord })
+	static AtInclude: TokenType;
+
+	@token(/@function/, { longer_alt: Token.AtWord })
+	static AtFunction: TokenType;
+
+	@token(/@return/, { longer_alt: Token.AtWord })
+	static AtReturn: TokenType;
+
+	@token(/@extend/, { longer_alt: Token.AtWord })
+	static AtExtend: TokenType;
+
+	@token(/@error/, { longer_alt: Token.AtWord })
+	static AtError: TokenType;
+
+	@token(/@warn/, { longer_alt: Token.AtWord })
+	static AtWarn: TokenType;
+
+	@token(/@debug/, { longer_alt: Token.AtWord })
+	static AtDebug: TokenType;
+
+	@token(/@at-root/, { longer_alt: Token.AtWord })
+	static AtAtRoot: TokenType;
+
+	@token(/@if/, { longer_alt: Token.AtWord })
+	static AtIf: TokenType;
+
+	@token(/@else/, { longer_alt: Token.AtWord })
+	static AtElse: TokenType;
+
+	@token(/@each/, { longer_alt: Token.AtWord })
+	static AtEach: TokenType;
+
+	@token(/@for/, { longer_alt: Token.AtWord })
+	static AtFor: TokenType;
+
+	@token(/@while/, { longer_alt: Token.AtWord })
+	static AtWhile: TokenType;
 
 	@token(re`/\$(${IDENT})/`)
 	static SassVar: TokenType;
@@ -181,9 +232,28 @@ export const Lexer = new ChevLexer([
 	Token.Keyword,
 	Token.And,
 	Token.Or,
-	Token.AtWord,
 	Token.SassVar,
 	Token.CustomProperty,
+	// At-Rules
+	Token.AtUse,
+	Token.AtForward,
+	Token.AtImport,
+	Token.AtMixin,
+	Token.AtInclude,
+	Token.AtFunction,
+	Token.AtReturn,
+	Token.AtExtend,
+	Token.AtError,
+	Token.AtWarn,
+	Token.AtDebug,
+	Token.AtAtRoot,
+	Token.AtIf,
+	Token.AtElse,
+	Token.AtEach,
+	Token.AtFor,
+	Token.AtWhile,
+	Token.AtWord,
+	// Any other identifier
 	Token.Ident,
 	// Delimiters
 	Token.DQuote,
