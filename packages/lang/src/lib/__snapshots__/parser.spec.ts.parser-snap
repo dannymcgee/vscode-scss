@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Parser parses Sass directive statements 1`] = `
+(SourceFile
+  (UniversalStmt
+    (SassDirectiveStmt
+      "@error" (AtError (2:(3,9))),
+      (QuotedStringExpr
+        (DQuotedStringExpr
+          '"' (DQuote (2:(10,11))),
+          "This" (Ident (2:(11,15))),
+          "is" (Ident (2:(16,18))),
+          "an" (Ident (2:(19,21))),
+          "error" (Ident (2:(22,27))),
+          "message" (Ident (2:(28,35))),
+          '"' (DQuote (2:(35,36))),
+        ),
+      ),
+      ";" (SemiColon (2:(36,37))),
+    ),
+  ),
+  (UniversalStmt
+    (SassDirectiveStmt
+      "@warn" (AtWarn (3:(3,8))),
+      (QuotedStringExpr
+        (DQuotedStringExpr
+          '"' (DQuote (3:(9,10))),
+          "This" (Ident (3:(10,14))),
+          "is" (Ident (3:(15,17))),
+          "a" (Ident (3:(18,19))),
+          "warning" (Ident (3:(20,27))),
+          "message" (Ident (3:(28,35))),
+          '"' (DQuote (3:(35,36))),
+        ),
+      ),
+      ";" (SemiColon (3:(36,37))),
+    ),
+  ),
+  (UniversalStmt
+    (SassDirectiveStmt
+      "@debug" (AtDebug (4:(3,9))),
+      (QuotedStringExpr
+        (DQuotedStringExpr
+          '"' (DQuote (4:(10,11))),
+          "This" (Ident (4:(11,15))),
+          "is" (Ident (4:(16,18))),
+          "a" (Ident (4:(19,20))),
+          "debug" (Ident (4:(21,26))),
+          "message" (Ident (4:(27,34))),
+          '"' (DQuote (4:(34,35))),
+        ),
+      ),
+      ";" (SemiColon (4:(35,36))),
+    ),
+  ),
+)
+`;
+
+exports[`Parser parses import statements 1`] = `
+(SourceFile
+  (TopLevelStmt
+    (ImportStmt
+      "@import" (AtImport (1:(0,7))),
+      (StringExpr
+        (QuotedStringExpr
+          (DQuotedStringExpr
+            '"' (DQuote (1:(8,9))),
+            "path" (Ident (1:(9,13))),
+            "/" (Slash (1:(13,14))),
+            "to" (Keyword (1:(14,16))),
+            "/" (Slash (1:(16,17))),
+            "stylesheet" (Ident (1:(17,27))),
+            "." (Dot (1:(27,28))),
+            "css" (Ident (1:(28,31))),
+            '"' (DQuote (1:(31,32))),
+          ),
+        ),
+      ),
+      ";" (SemiColon (1:(32,33))),
+    ),
+  ),
+)
+`;
+
+exports[`Parser parses module load statements 1`] = `
+(SourceFile
+  (TopLevelStmt
+    (ModuleLoadStmt
+      "@use" (AtUse (1:(0,4))),
+      (QuotedStringExpr
+        (DQuotedStringExpr
+          '"' (DQuote (1:(5,6))),
+          "sass" (Ident (1:(6,10))),
+          ":" (Colon (1:(10,11))),
+          "math" (Ident (1:(11,15))),
+          '"' (DQuote (1:(15,16))),
+        ),
+      ),
+      ";" (SemiColon (1:(16,17))),
+    ),
+  ),
+)
+`;
+
+exports[`Parser parses variable declaration statements 1`] = `
+(SourceFile
+  (UniversalStmt
+    (VarDeclStmt
+      "$hello" (SassVar (1:(0,6))),
+      ":" (Colon (1:(6,7))),
+      (Expression
+        (StringExpr
+          (QuotedStringExpr
+            (DQuotedStringExpr
+              '"' (DQuote (1:(8,9))),
+              "Hello" (Ident (1:(9,14))),
+              "," (Comma (1:(14,15))),
+              "world" (Ident (1:(16,21))),
+              "!" (Bang (1:(21,22))),
+              '"' (DQuote (1:(22,23))),
+            ),
+          ),
+        ),
+      ),
+      ";" (SemiColon (1:(23,24))),
+    ),
+  ),
+)
+`;

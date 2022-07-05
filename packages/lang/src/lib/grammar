@@ -1,0 +1,62 @@
+SourceFile
+	= ( UniversalStmt | TopLevelStmt )*
+	;
+
+UniversalStmt
+	= VarDeclStmt
+#	| FlowControlStmt
+	| SassDirectiveStmt
+	;
+
+TopLevelStmt
+	= ModuleLoadStmt
+	| ImportStmt
+#	| MixinDefStmt
+#	| FunctionDefStmt
+	;
+
+VarDeclStmt
+	= Token.SassVar Token.Colon Expression Token.SemiColon
+	;
+
+SassDirectiveStmt
+	= ( Token.AtError | Token.AtWarn | Token.AtDebug )
+		QuotedStringExpr
+		Token.SemiColon
+	;
+
+ModuleLoadStmt
+	= Token.AtUse
+		QuotedStringExpr
+		( Token.As ( Token.Ident | Token.Star ) )?
+		Token.SemiColon
+	;
+
+ImportStmt
+	= Token.AtImport StringExpr Token.SemiColon
+	;
+
+Expression
+	= StringExpr
+	;
+
+StringExpr
+	= QuotedStringExpr
+	| UnquotedStringExpr
+	;
+
+QuotedStringExpr
+	= SQuotedStringExpr | DQuotedStringExpr
+	;
+
+SQuotedStringExpr
+	= Token.SQuote ( !Token.SQuote )* Token.SQuote
+	;
+
+DQuotedStringExpr
+	= Token.DQuote ( !Token.DQuote )* Token.DQuote
+	;
+
+UnquotedStringExpr
+	= ( !Token.SemiColon )+
+	;

@@ -24,9 +24,11 @@ export class Token {
 	@token(IDENT)
 	static Ident: TokenType;
 
-	// TODO: These are only keywords in certain contexts
-	@token(re`/(if|else|from|through|to|in|as)${WB}/`, { longer_alt: Token.Ident })
+	@token(re`/(if|else|from|through|to|in)${WB}/`, { longer_alt: Token.Ident })
 	static Keyword: TokenType;
+
+	@token(re`/(as)${WB}/`, { longer_alt: Token.Ident })
+	static As: TokenType;
 
 	@token(re`/(and)${WB}/`, { longer_alt: Token.Ident })
 	static And: TokenType;
@@ -217,7 +219,7 @@ export class Token {
 	static Ampersand: TokenType;
 }
 
-export const Lexer = new ChevLexer([
+export const TOKEN_VOCAB = [
 	Token.Whitespace,
 	// Comments
 	Token.SassDoc,
@@ -230,6 +232,7 @@ export const Lexer = new ChevLexer([
 	Token.NumLiteral,
 	// Ident and family
 	Token.Keyword,
+	Token.As,
 	Token.And,
 	Token.Or,
 	Token.SassVar,
@@ -292,4 +295,10 @@ export const Lexer = new ChevLexer([
 	Token.GreaterEqual,
 	Token.Greater,
 	Token.Ampersand,
-]);
+] as const;
+
+export const Lexer = new ChevLexer(TOKEN_VOCAB.slice());
+
+export function isQuote(type: TokenType): boolean {
+	return type === Token.SQuote || type === Token.DQuote;
+}

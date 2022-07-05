@@ -41,7 +41,12 @@ const node: TMGrammarScope = {
 	endCaptures: {
 		0: { name: `punctuation.definition.syntax-node.end.${SCOPE}` },
 	},
-	patterns: [{ include: "#nodeField" }],
+	patterns: [
+		{ include: "#nodeField" },
+		{ include: "#node" },
+		{ include: "#token" },
+		{ include: "#punctuation" },
+	],
 };
 
 const nodeKind: TMGrammarScope = {
@@ -122,7 +127,7 @@ const token: TMGrammarScope = {
 		2: { name: `punctuation.definition.string.begin.${SCOPE}` },
 		3: { name: `punctuation.definition.string.end.${SCOPE}` },
 		4: { name: `punctuation.brace.round.${SCOPE}` },
-		5: { name: `meta.token.kind.${SCOPE} keyword.other.token-kind.${SCOPE}` },
+		5: { name: `meta.token.kind.${SCOPE} variable.other.enummember.${SCOPE}` },
 	},
 	end: /\)/,
 	endCaptures: {
@@ -148,6 +153,7 @@ const span: TMGrammarScope = {
 	},
 	// prettier-ignore
 	patterns: [
+		{ include: "#span" },
 		{ include: "#numbers" },
 		{ include: "#punctuation" },
 	],
@@ -173,10 +179,6 @@ const array: TMGrammarScope = {
 
 const punctuation: TMGrammarScope = {
 	patterns: [
-		{
-			name: `punctuation.brace.round.${SCOPE}`,
-			match: /[()]/,
-		},
 		{
 			name: `punctuation.brace.square.${SCOPE}`,
 			// eslint-disable-next-line no-useless-escape

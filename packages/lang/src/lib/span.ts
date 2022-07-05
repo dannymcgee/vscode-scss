@@ -1,4 +1,4 @@
-import { IToken } from "chevrotain";
+import { CstNodeLocation } from "chevrotain";
 
 export class Position {
 	/** Zero-indexed */
@@ -13,6 +13,13 @@ export class Position {
 
 	copy(): Position {
 		return new Position(this.line, this.char);
+	}
+
+	compare(other: Position): number {
+		if (this.line === other.line) {
+			return this.char - other.char;
+		}
+		return this.line - other.line;
 	}
 
 	toString(): string {
@@ -33,24 +40,35 @@ export class Span {
 		this.end = end;
 	}
 
-	static fromToken(token: IToken): Span {
+	static fromChevLocation(loc: CstNodeLocation): Span {
+		if (!loc) {
+			throw new Error("Location is undefined");
+		}
 		if (
-			token.startLine == null
-			|| token.endLine == null
-			|| token.startColumn == null
-			|| token.endColumn == null
+			loc.startLine == null
+			|| loc.endLine == null
+			|| loc.startColumn == null
+			|| loc.endColumn == null
 		) {
-			throw new Error("token span is not fully defined");
+			throw new Error("Location is not fully defined");
 		}
 
-		const start = new Position(token.startLine - 1, token.startColumn - 1);
-		const end = new Position(token.endLine - 1, token.endColumn);
+		const start = new Position(loc.startLine - 1, loc.startColumn - 1);
+		const end = new Position(loc.endLine - 1, loc.endColumn);
 
 		return new Span(start, end);
 	}
 
 	copy(): Span {
 		return new Span(this.start.copy(), this.end.copy());
+	}
+
+	compareStart(other: Span): number {
+		return this.start.compare(other.start);
+	}
+
+	compareEnd(other: Span): number {
+		return this.end.compare(other.end);
 	}
 
 	toString(): string {
