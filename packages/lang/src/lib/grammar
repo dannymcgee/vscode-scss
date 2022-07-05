@@ -12,7 +12,7 @@ TopLevelStmt
 	= ModuleLoadStmt
 	| ImportStmt
 	| MixinDefStmt
-#	| FunctionDefStmt
+	| FunctionDefStmt
 	;
 
 VarDeclStmt
@@ -40,6 +40,14 @@ MixinDefStmt
 	= Token.AtMixin Token.Ident ( Parameters )? RuleBlock
 	;
 
+FunctionDefStmt
+	= Token.AtFunction Token.Ident Parameters FunctionBody
+	;
+
+ReturnStmt
+	= Token.AtReturn Expression
+	;
+
 Parameters
 	= Token.LParen
 		( Parameter
@@ -62,13 +70,21 @@ RuleBlock
 		Token.RBrace
 	;
 
+FunctionBody
+	= Token.LBrace
+		(( UniversalStmt | ReturnStmt )
+			( Token.SemiColon ( UniversalStmt | ReturnStmt ))*
+			( Token.SemiColon )?
+		)?
+		Token.RBrace
+	;
+
 Expression
 	= StringExpr
 	;
 
 StringExpr
-	= QuotedStringExpr
-	| UnquotedStringExpr
+	= QuotedStringExpr | UnquotedStringExpr
 	;
 
 QuotedStringExpr
@@ -76,13 +92,13 @@ QuotedStringExpr
 	;
 
 SQuotedStringExpr
-	= Token.SQuote ( !Token.SQuote )* Token.SQuote
+	= Token.SQuote ( ~Token.SQuote )* Token.SQuote
 	;
 
 DQuotedStringExpr
-	= Token.DQuote ( !Token.DQuote )* Token.DQuote
+	= Token.DQuote ( ~Token.DQuote )* Token.DQuote
 	;
 
 UnquotedStringExpr
-	= ( !Token.SemiColon )+
+	= ( ~Token.SemiColon )+
 	;

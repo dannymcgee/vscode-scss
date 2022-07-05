@@ -51,7 +51,7 @@ class CstParser extends BaseCstParser {
 				{ ALT: () => $.SUBRULE($.ModuleLoadStmt) },
 				{ ALT: () => $.SUBRULE($.ImportStmt) },
 				{ ALT: () => $.SUBRULE($.MixinDefStmt) },
-//				{ ALT: () => $.SUBRULE($.FunctionDefStmt) },
+				{ ALT: () => $.SUBRULE($.FunctionDefStmt) },
 			]);
 		});
 
@@ -100,6 +100,18 @@ class CstParser extends BaseCstParser {
 			$.SUBRULE($.RuleBlock);
 		});
 
+		$.RULE("FunctionDefStmt", () => {
+			$.CONSUME(Token.AtFunction);
+			$.CONSUME(Token.Ident);
+			$.SUBRULE($.Parameters);
+			$.SUBRULE($.FunctionBody);
+		});
+
+		$.RULE("ReturnStmt", () => {
+			$.CONSUME(Token.AtReturn);
+			$.SUBRULE($.Expression);
+		});
+
 		$.RULE("Parameters", () => {
 			$.CONSUME(Token.LParen);
 			$.OPTION(() => {
@@ -126,6 +138,27 @@ class CstParser extends BaseCstParser {
 		$.RULE("RuleBlock", () => {
 			$.CONSUME(Token.LBrace);
 			// TODO
+			$.CONSUME(Token.RBrace);
+		});
+
+		$.RULE("FunctionBody", () => {
+			$.CONSUME(Token.LBrace);
+			$.OPTION(() => {
+				$.OR([
+					{ ALT: () => $.SUBRULE($.UniversalStmt) },
+					{ ALT: () => $.SUBRULE($.ReturnStmt) },
+				]);
+				$.MANY(() => {
+					$.CONSUME(Token.SemiColon);
+					$.OR1([
+						{ ALT: () => $.SUBRULE1($.UniversalStmt) },
+						{ ALT: () => $.SUBRULE1($.ReturnStmt) },
+					]);
+				});
+				$.OPTION1(() => {
+					$.CONSUME1(Token.SemiColon);
+				});
+			});
 			$.CONSUME(Token.RBrace);
 		});
 
@@ -180,6 +213,8 @@ class CstParser extends BaseCstParser {
 	declare ModuleLoadStmt: CstMethod;
 	declare ImportStmt: CstMethod;
 	declare MixinDefStmt: CstMethod;
+	declare FunctionDefStmt: CstMethod;
+	declare ReturnStmt: CstMethod;
 
 	declare Expression: CstMethod;
 
@@ -192,6 +227,7 @@ class CstParser extends BaseCstParser {
 	declare Parameters: CstMethod;
 	declare Parameter: CstMethod;
 	declare RuleBlock: CstMethod;
+	declare FunctionBody: CstMethod;
 
 	private quotedStringExpr(quote: TokenType) {
 		const $ = this;

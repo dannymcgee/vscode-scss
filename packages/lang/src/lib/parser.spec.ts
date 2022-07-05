@@ -62,18 +62,28 @@ describe("Parser", () => {
 
 	it("parses parameters with a trailing comma", () => {
 		const input = `
-		@mixin foo(
+		(
 			$bar,
 			$baz,
 			$foobar,
-		) {}`;
-		const result = parser.parse(input);
+		)`;
+		const result = parser.parse(input, "Parameters");
 
 		expect(result).toMatchSnapshot();
 	});
 
 	it("parses parameters with default values", () => {
-		const input = `@mixin foo($bar, $baz: "hello") {}`;
+		const input = `($bar, $baz: "hello")`;
+		const result = parser.parse(input, "Parameters");
+
+		expect(result).toMatchSnapshot();
+	});
+
+	it("parses function definitions", () => {
+		const input = `
+		@function hello($name) {
+			@return "Hello, #{$name}!";
+		}`;
 		const result = parser.parse(input);
 
 		expect(result).toMatchSnapshot();

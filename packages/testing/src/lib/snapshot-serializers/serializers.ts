@@ -53,8 +53,8 @@ export class CstNodeSerializer implements SnapshotSerializer<CstNode> {
 
 	serialize(
 		{ name, children: childMap, recoveredNode }: CstNode,
-		...rest: Slice<1, SerializeParams>): string
-	{
+		...rest: Slice<1, SerializeParams>
+	): string {
 		const children = Object
 			.values(childMap)
 			.flatMap(elements =>

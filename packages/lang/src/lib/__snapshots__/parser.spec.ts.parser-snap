@@ -56,6 +56,48 @@ exports[`Parser parses Sass directive statements 1`] = `
 )
 `;
 
+exports[`Parser parses function definitions 1`] = `
+(SourceFile
+  (TopLevelStmt
+    (FunctionDefStmt
+      "@function" (AtFunction (2:(2,11))),
+      "hello" (Ident (2:(12,17))),
+      (Parameters
+        "(" (LParen (2:(17,18))),
+        (Parameter
+          "$name" (SassVar (2:(18,23))),
+        ),
+        ")" (RParen (2:(23,24))),
+      ),
+      (FunctionBody
+        "{" (LBrace (2:(25,26))),
+        (ReturnStmt
+          "@return" (AtReturn (3:(3,10))),
+          (Expression
+            (StringExpr
+              (QuotedStringExpr
+                (DQuotedStringExpr
+                  '"' (DQuote (3:(11,12))),
+                  "Hello" (Ident (3:(12,17))),
+                  "," (Comma (3:(17,18))),
+                  "#{" (HashBrace (3:(19,21))),
+                  "$name" (SassVar (3:(21,26))),
+                  "}" (RBrace (3:(26,27))),
+                  "!" (Bang (3:(27,28))),
+                  '"' (DQuote (3:(28,29))),
+                ),
+              ),
+            ),
+          ),
+        ),
+        ";" (SemiColon (3:(29,30))),
+        "}" (RBrace (4:(2,3))),
+      ),
+    ),
+  ),
+)
+`;
+
 exports[`Parser parses import statements 1`] = `
 (SourceFile
   (TopLevelStmt
@@ -148,71 +190,47 @@ exports[`Parser parses parameterized mixin definitions 1`] = `
 `;
 
 exports[`Parser parses parameters with a trailing comma 1`] = `
-(SourceFile
-  (TopLevelStmt
-    (MixinDefStmt
-      "@mixin" (AtMixin (2:(2,8))),
-      "foo" (Ident (2:(9,12))),
-      (Parameters
-        "(" (LParen (2:(12,13))),
-        (Parameter
-          "$bar" (SassVar (3:(3,7))),
-        ),
-        "," (Comma (3:(7,8))),
-        (Parameter
-          "$baz" (SassVar (4:(3,7))),
-        ),
-        "," (Comma (4:(7,8))),
-        (Parameter
-          "$foobar" (SassVar (5:(3,10))),
-        ),
-        "," (Comma (5:(10,11))),
-        ")" (RParen (6:(2,3))),
-      ),
-      (RuleBlock
-        "{" (LBrace (6:(4,5))),
-        "}" (RBrace (6:(5,6))),
-      ),
-    ),
+(Parameters
+  "(" (LParen (2:(2,3))),
+  (Parameter
+    "$bar" (SassVar (3:(3,7))),
   ),
+  "," (Comma (3:(7,8))),
+  (Parameter
+    "$baz" (SassVar (4:(3,7))),
+  ),
+  "," (Comma (4:(7,8))),
+  (Parameter
+    "$foobar" (SassVar (5:(3,10))),
+  ),
+  "," (Comma (5:(10,11))),
+  ")" (RParen (6:(2,3))),
 )
 `;
 
 exports[`Parser parses parameters with default values 1`] = `
-(SourceFile
-  (TopLevelStmt
-    (MixinDefStmt
-      "@mixin" (AtMixin (1:(0,6))),
-      "foo" (Ident (1:(7,10))),
-      (Parameters
-        "(" (LParen (1:(10,11))),
-        (Parameter
-          "$bar" (SassVar (1:(11,15))),
-        ),
-        "," (Comma (1:(15,16))),
-        (Parameter
-          "$baz" (SassVar (1:(17,21))),
-          ":" (Colon (1:(21,22))),
-          (Expression
-            (StringExpr
-              (QuotedStringExpr
-                (DQuotedStringExpr
-                  '"' (DQuote (1:(23,24))),
-                  "hello" (Ident (1:(24,29))),
-                  '"' (DQuote (1:(29,30))),
-                ),
-              ),
-            ),
+(Parameters
+  "(" (LParen (1:(0,1))),
+  (Parameter
+    "$bar" (SassVar (1:(1,5))),
+  ),
+  "," (Comma (1:(5,6))),
+  (Parameter
+    "$baz" (SassVar (1:(7,11))),
+    ":" (Colon (1:(11,12))),
+    (Expression
+      (StringExpr
+        (QuotedStringExpr
+          (DQuotedStringExpr
+            '"' (DQuote (1:(13,14))),
+            "hello" (Ident (1:(14,19))),
+            '"' (DQuote (1:(19,20))),
           ),
         ),
-        ")" (RParen (1:(30,31))),
-      ),
-      (RuleBlock
-        "{" (LBrace (1:(32,33))),
-        "}" (RBrace (1:(33,34))),
       ),
     ),
   ),
+  ")" (RParen (1:(20,21))),
 )
 `;
 
