@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { Fn, KeysWhere } from "@sassy/util";
 import { CstNode, CstParser as ChevCstParser, TokenType } from "chevrotain";
+
 import { isQuote, Lexer, Token, TOKEN_VOCAB } from "./lexer";
 
 type CstMethod<Params extends unknown[] = []> =
@@ -49,7 +50,7 @@ class CstParser extends BaseCstParser {
 			$.OR([
 				{ ALT: () => $.SUBRULE($.ModuleLoadStmt) },
 				{ ALT: () => $.SUBRULE($.ImportStmt) },
-//				{ ALT: () => $.SUBRULE($.MixinDefStmt) },
+				{ ALT: () => $.SUBRULE($.MixinDefStmt) },
 //				{ ALT: () => $.SUBRULE($.FunctionDefStmt) },
 			]);
 		});
@@ -90,6 +91,44 @@ class CstParser extends BaseCstParser {
 			$.CONSUME(Token.SemiColon);
 		});
 
+		$.RULE("MixinDefStmt", () => {
+			$.CONSUME(Token.AtMixin);
+			$.CONSUME(Token.Ident);
+			$.OPTION(() => {
+				$.SUBRULE($.Parameters);
+			});
+			$.SUBRULE($.RuleBlock);
+		});
+
+		$.RULE("Parameters", () => {
+			$.CONSUME(Token.LParen);
+			$.OPTION(() => {
+				$.SUBRULE($.Parameter);
+				$.MANY(() => {
+					$.CONSUME(Token.Comma);
+					$.SUBRULE1($.Parameter);
+				});
+				$.OPTION1(() => {
+					$.CONSUME1(Token.Comma);
+				});
+			});
+			$.CONSUME(Token.RParen);
+		});
+
+		$.RULE("Parameter", () => {
+			$.CONSUME(Token.SassVar);
+			$.OPTION(() => {
+				$.CONSUME(Token.Colon);
+				$.SUBRULE($.Expression);
+			});
+		});
+
+		$.RULE("RuleBlock", () => {
+			$.CONSUME(Token.LBrace);
+			// TODO
+			$.CONSUME(Token.RBrace);
+		});
+
 		$.RULE("Expression", () => {
 			$.OR([
 				{ ALT: () => $.SUBRULE($.StringExpr) },
@@ -118,6 +157,7 @@ class CstParser extends BaseCstParser {
 		$.RULE("SQuotedStringExpr", () => {
 			this.quotedStringExpr(Token.SQuote);
 		});
+
 		$.RULE("DQuotedStringExpr", () => {
 			this.quotedStringExpr(Token.DQuote);
 		});
@@ -139,6 +179,7 @@ class CstParser extends BaseCstParser {
 	declare SassDirectiveStmt: CstMethod;
 	declare ModuleLoadStmt: CstMethod;
 	declare ImportStmt: CstMethod;
+	declare MixinDefStmt: CstMethod;
 
 	declare Expression: CstMethod;
 
@@ -148,6 +189,10 @@ class CstParser extends BaseCstParser {
 	declare SQuotedStringExpr: CstMethod;
 	declare UnquotedStringExpr: CstMethod;
 
+	declare Parameters: CstMethod;
+	declare Parameter: CstMethod;
+	declare RuleBlock: CstMethod;
+
 	private quotedStringExpr(quote: TokenType) {
 		const $ = this;
 
@@ -155,19 +200,27 @@ class CstParser extends BaseCstParser {
 		$.MANY(() => {
 			$.NOT(quote);
 		});
-		$.CONSUME2(quote);
+		$.CONSUME1(quote);
 	}
 }
 
 export class Parser {
 	private static instance = new CstParser();
 
-	parse(input: string, entry?: Exclude<KeysWhere<CstParser, CstMethod>, keyof ChevCstParser>) {
+	parse(input: string, entry?: Exclude<KeysWhere<CstParser, CstMethod>, keyof BaseCstParser>) {
 		const { tokens } = Lexer.tokenize(input);
 		Parser.instance.input = tokens;
 
-		if (entry) return Parser.instance[entry]();
+		const result = entry
+			? Parser.instance[entry]()
+			: Parser.instance.SourceFile();
 
-		return Parser.instance.SourceFile();
+		if (Parser.instance.errors.length) {
+			const errors = Parser.instance.errors.slice();
+			Parser.instance.errors = [];
+
+			return errors;
+		}
+		return result;
 	}
 }

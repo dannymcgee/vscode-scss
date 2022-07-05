@@ -82,6 +82,25 @@ exports[`Parser parses import statements 1`] = `
 )
 `;
 
+exports[`Parser parses mixin definitions with empty param lists 1`] = `
+(SourceFile
+  (TopLevelStmt
+    (MixinDefStmt
+      "@mixin" (AtMixin (1:(0,6))),
+      "foo" (Ident (1:(7,10))),
+      (Parameters
+        "(" (LParen (1:(10,11))),
+        ")" (RParen (1:(11,12))),
+      ),
+      (RuleBlock
+        "{" (LBrace (1:(13,14))),
+        "}" (RBrace (1:(14,15))),
+      ),
+    ),
+  ),
+)
+`;
+
 exports[`Parser parses module load statements 1`] = `
 (SourceFile
   (TopLevelStmt
@@ -97,6 +116,116 @@ exports[`Parser parses module load statements 1`] = `
         ),
       ),
       ";" (SemiColon (1:(16,17))),
+    ),
+  ),
+)
+`;
+
+exports[`Parser parses parameterized mixin definitions 1`] = `
+(SourceFile
+  (TopLevelStmt
+    (MixinDefStmt
+      "@mixin" (AtMixin (1:(0,6))),
+      "foo" (Ident (1:(7,10))),
+      (Parameters
+        "(" (LParen (1:(10,11))),
+        (Parameter
+          "$bar" (SassVar (1:(11,15))),
+        ),
+        "," (Comma (1:(15,16))),
+        (Parameter
+          "$baz" (SassVar (1:(17,21))),
+        ),
+        ")" (RParen (1:(21,22))),
+      ),
+      (RuleBlock
+        "{" (LBrace (1:(23,24))),
+        "}" (RBrace (1:(24,25))),
+      ),
+    ),
+  ),
+)
+`;
+
+exports[`Parser parses parameters with a trailing comma 1`] = `
+(SourceFile
+  (TopLevelStmt
+    (MixinDefStmt
+      "@mixin" (AtMixin (2:(2,8))),
+      "foo" (Ident (2:(9,12))),
+      (Parameters
+        "(" (LParen (2:(12,13))),
+        (Parameter
+          "$bar" (SassVar (3:(3,7))),
+        ),
+        "," (Comma (3:(7,8))),
+        (Parameter
+          "$baz" (SassVar (4:(3,7))),
+        ),
+        "," (Comma (4:(7,8))),
+        (Parameter
+          "$foobar" (SassVar (5:(3,10))),
+        ),
+        "," (Comma (5:(10,11))),
+        ")" (RParen (6:(2,3))),
+      ),
+      (RuleBlock
+        "{" (LBrace (6:(4,5))),
+        "}" (RBrace (6:(5,6))),
+      ),
+    ),
+  ),
+)
+`;
+
+exports[`Parser parses parameters with default values 1`] = `
+(SourceFile
+  (TopLevelStmt
+    (MixinDefStmt
+      "@mixin" (AtMixin (1:(0,6))),
+      "foo" (Ident (1:(7,10))),
+      (Parameters
+        "(" (LParen (1:(10,11))),
+        (Parameter
+          "$bar" (SassVar (1:(11,15))),
+        ),
+        "," (Comma (1:(15,16))),
+        (Parameter
+          "$baz" (SassVar (1:(17,21))),
+          ":" (Colon (1:(21,22))),
+          (Expression
+            (StringExpr
+              (QuotedStringExpr
+                (DQuotedStringExpr
+                  '"' (DQuote (1:(23,24))),
+                  "hello" (Ident (1:(24,29))),
+                  '"' (DQuote (1:(29,30))),
+                ),
+              ),
+            ),
+          ),
+        ),
+        ")" (RParen (1:(30,31))),
+      ),
+      (RuleBlock
+        "{" (LBrace (1:(32,33))),
+        "}" (RBrace (1:(33,34))),
+      ),
+    ),
+  ),
+)
+`;
+
+exports[`Parser parses simple mixin definitions 1`] = `
+(SourceFile
+  (TopLevelStmt
+    (MixinDefStmt
+      "@mixin" (AtMixin (1:(0,6))),
+      "foo" (Ident (1:(7,10))),
+      (RuleBlock
+        "{" (LBrace (1:(11,12))),
+        "}" (RBrace (1:(12,13))),
+      ),
     ),
   ),
 )

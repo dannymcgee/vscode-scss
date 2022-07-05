@@ -113,14 +113,20 @@ export class Token {
 	@token(/#{/)
 	static HashBrace: TokenType;
 
-	@token(/[{}]/)
-	static Brace: TokenType;
+	@token(/{/)
+	static LBrace: TokenType;
+
+	@token(/}/)
+	static RBrace: TokenType;
 
 	@token(/[[\]]/)
 	static Bracket: TokenType;
 
-	@token(/[()]/)
-	static Paren: TokenType;
+	@token(/\(/)
+	static LParen: TokenType;
+
+	@token(/\)/)
+	static RParen: TokenType;
 
 	@token(/"/)
 	static DQuote: TokenType;
@@ -262,9 +268,11 @@ export const TOKEN_VOCAB = [
 	Token.DQuote,
 	Token.SQuote,
 	Token.HashBrace,
-	Token.Brace,
+	Token.LBrace,
+	Token.RBrace,
 	Token.Bracket,
-	Token.Paren,
+	Token.LParen,
+	Token.RParen,
 	// Punctuation
 	Token.Dot,
 	Token.Hash,

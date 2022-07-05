@@ -38,4 +38,44 @@ describe("Parser", () => {
 
 		expect(result).toMatchSnapshot();
 	});
+
+	it("parses simple mixin definitions", () => {
+		const input = `@mixin foo {}`;
+		const result = parser.parse(input);
+
+		expect(result).toMatchSnapshot();
+	});
+
+	it("parses parameterized mixin definitions", () => {
+		const input = `@mixin foo($bar, $baz) {}`;
+		const result = parser.parse(input);
+
+		expect(result).toMatchSnapshot();
+	});
+
+	it("parses mixin definitions with empty param lists", () => {
+		const input = `@mixin foo() {}`;
+		const result = parser.parse(input);
+
+		expect(result).toMatchSnapshot();
+	});
+
+	it("parses parameters with a trailing comma", () => {
+		const input = `
+		@mixin foo(
+			$bar,
+			$baz,
+			$foobar,
+		) {}`;
+		const result = parser.parse(input);
+
+		expect(result).toMatchSnapshot();
+	});
+
+	it("parses parameters with default values", () => {
+		const input = `@mixin foo($bar, $baz: "hello") {}`;
+		const result = parser.parse(input);
+
+		expect(result).toMatchSnapshot();
+	});
 });
