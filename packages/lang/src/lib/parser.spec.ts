@@ -139,4 +139,24 @@ describe("Parser", () => {
 
 		expect(result).toMatchSnapshot();
 	});
+
+	it("parses blocks with optional final semicolon", () => {
+		const withSemi = `
+		{
+			$foo: "foo";
+			$bar: "bar";
+			$baz: "baz";
+		}`;
+		let result = parser.parse(withSemi, "Block");
+		expect(result).toMatchSnapshot("WITH semicolon");
+
+		const withoutSemi = `
+		{
+			$foo: "foo";
+			$bar: "bar";
+			$baz: "baz"
+		}`;
+		result = parser.parse(withoutSemi, "Block");
+		expect(result).toMatchSnapshot("WITHOUT semicolon");
+	});
 });

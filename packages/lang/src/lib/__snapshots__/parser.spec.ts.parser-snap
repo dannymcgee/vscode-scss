@@ -162,7 +162,9 @@ exports[`Parser parses Sass directive statements 1`] = `
           '"' (DQuote (2:(35,36))),
         ),
       ),
-      ";" (SemiColon (2:(36,37))),
+      (Terminator
+        ";" (SemiColon (2:(36,37))),
+      ),
     ),
   ),
   (UniversalStmt
@@ -179,7 +181,9 @@ exports[`Parser parses Sass directive statements 1`] = `
           '"' (DQuote (3:(35,36))),
         ),
       ),
-      ";" (SemiColon (3:(36,37))),
+      (Terminator
+        ";" (SemiColon (3:(36,37))),
+      ),
     ),
   ),
   (UniversalStmt
@@ -196,9 +200,143 @@ exports[`Parser parses Sass directive statements 1`] = `
           '"' (DQuote (4:(34,35))),
         ),
       ),
-      ";" (SemiColon (4:(35,36))),
+      (Terminator
+        ";" (SemiColon (4:(35,36))),
+      ),
     ),
   ),
+)
+`;
+
+exports[`Parser parses blocks with optional final semicolon: WITH semicolon 1`] = `
+(Block
+  "{" (LBrace (2:(2,3))),
+  (BlockLevelStmt
+    (UniversalStmt
+      (VarDeclStmt
+        "$foo" (SassVar (3:(3,7))),
+        ":" (Colon (3:(7,8))),
+        (Expression
+          (StringExpr
+            (DQuotedStringExpr
+              '"' (DQuote (3:(9,10))),
+              "foo" (Ident (3:(10,13))),
+              '"' (DQuote (3:(13,14))),
+            ),
+          ),
+        ),
+        (Terminator
+          ";" (SemiColon (3:(14,15))),
+        ),
+      ),
+    ),
+  ),
+  (BlockLevelStmt
+    (UniversalStmt
+      (VarDeclStmt
+        "$bar" (SassVar (4:(3,7))),
+        ":" (Colon (4:(7,8))),
+        (Expression
+          (StringExpr
+            (DQuotedStringExpr
+              '"' (DQuote (4:(9,10))),
+              "bar" (Ident (4:(10,13))),
+              '"' (DQuote (4:(13,14))),
+            ),
+          ),
+        ),
+        (Terminator
+          ";" (SemiColon (4:(14,15))),
+        ),
+      ),
+    ),
+  ),
+  (BlockLevelStmt
+    (UniversalStmt
+      (VarDeclStmt
+        "$baz" (SassVar (5:(3,7))),
+        ":" (Colon (5:(7,8))),
+        (Expression
+          (StringExpr
+            (DQuotedStringExpr
+              '"' (DQuote (5:(9,10))),
+              "baz" (Ident (5:(10,13))),
+              '"' (DQuote (5:(13,14))),
+            ),
+          ),
+        ),
+        (Terminator
+          ";" (SemiColon (5:(14,15))),
+        ),
+      ),
+    ),
+  ),
+  "}" (RBrace (6:(2,3))),
+)
+`;
+
+exports[`Parser parses blocks with optional final semicolon: WITHOUT semicolon 1`] = `
+(Block
+  "{" (LBrace (2:(2,3))),
+  (BlockLevelStmt
+    (UniversalStmt
+      (VarDeclStmt
+        "$foo" (SassVar (3:(3,7))),
+        ":" (Colon (3:(7,8))),
+        (Expression
+          (StringExpr
+            (DQuotedStringExpr
+              '"' (DQuote (3:(9,10))),
+              "foo" (Ident (3:(10,13))),
+              '"' (DQuote (3:(13,14))),
+            ),
+          ),
+        ),
+        (Terminator
+          ";" (SemiColon (3:(14,15))),
+        ),
+      ),
+    ),
+  ),
+  (BlockLevelStmt
+    (UniversalStmt
+      (VarDeclStmt
+        "$bar" (SassVar (4:(3,7))),
+        ":" (Colon (4:(7,8))),
+        (Expression
+          (StringExpr
+            (DQuotedStringExpr
+              '"' (DQuote (4:(9,10))),
+              "bar" (Ident (4:(10,13))),
+              '"' (DQuote (4:(13,14))),
+            ),
+          ),
+        ),
+        (Terminator
+          ";" (SemiColon (4:(14,15))),
+        ),
+      ),
+    ),
+  ),
+  (BlockLevelStmt
+    (UniversalStmt
+      (VarDeclStmt
+        "$baz" (SassVar (5:(3,7))),
+        ":" (Colon (5:(7,8))),
+        (Expression
+          (StringExpr
+            (DQuotedStringExpr
+              '"' (DQuote (5:(9,10))),
+              "baz" (Ident (5:(10,13))),
+              '"' (DQuote (5:(13,14))),
+            ),
+          ),
+        ),
+        (Terminator),
+      ),
+    ),
+  ),
+  "}" (RBrace (6:(2,3))),
 )
 `;
 
@@ -234,9 +372,11 @@ exports[`Parser parses function definitions 1`] = `
                 ),
               ),
             ),
+            (Terminator
+              ";" (SemiColon (3:(29,30))),
+            ),
           ),
         ),
-        ";" (SemiColon (3:(29,30))),
         "}" (RBrace (4:(2,3))),
       ),
     ),
@@ -262,7 +402,9 @@ exports[`Parser parses import statements 1`] = `
           '"' (DQuote (1:(31,32))),
         ),
       ),
-      ";" (SemiColon (1:(32,33))),
+      (Terminator
+        ";" (SemiColon (1:(32,33))),
+      ),
     ),
   ),
 )
@@ -301,7 +443,9 @@ exports[`Parser parses module load statements 1`] = `
           '"' (DQuote (1:(15,16))),
         ),
       ),
-      ";" (SemiColon (1:(16,17))),
+      (Terminator
+        ";" (SemiColon (1:(16,17))),
+      ),
     ),
   ),
 )
@@ -428,7 +572,9 @@ exports[`Parser parses variable declaration statements 1`] = `
           ),
         ),
       ),
-      ";" (SemiColon (1:(23,24))),
+      (Terminator
+        ";" (SemiColon (1:(23,24))),
+      ),
     ),
   ),
 )

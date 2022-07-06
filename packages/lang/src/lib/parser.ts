@@ -67,7 +67,7 @@ class CstParser extends BaseCstParser {
 			$.CONSUME(Token.SassVar);
 			$.CONSUME(Token.Colon);
 			$.SUBRULE($.Expression);
-			$.CONSUME(Token.SemiColon);
+			$.SUBRULE($.Terminator);
 		});
 
 		$.RULE("FlowControlStmt", () => {
@@ -117,7 +117,7 @@ class CstParser extends BaseCstParser {
 				{ ALT: () => $.CONSUME(Token.AtDebug) },
 			]);
 			$.SUBRULE($.StringExpr);
-			$.CONSUME(Token.SemiColon);
+			$.SUBRULE($.Terminator);
 		});
 
 		$.RULE("ModuleLoadStmt", () => {
@@ -136,7 +136,7 @@ class CstParser extends BaseCstParser {
 		$.RULE("ImportStmt", () => {
 			$.CONSUME(Token.AtImport);
 			$.SUBRULE($.StringExpr);
-			$.CONSUME(Token.SemiColon);
+			$.SUBRULE($.Terminator);
 		});
 
 		$.RULE("MixinDefStmt", () => {
@@ -158,6 +158,7 @@ class CstParser extends BaseCstParser {
 		$.RULE("ReturnStmt", () => {
 			$.CONSUME(Token.AtReturn);
 			$.SUBRULE($.Expression);
+			$.SUBRULE($.Terminator);
 		});
 
 		$.RULE("Parameters", () => {
@@ -188,18 +189,8 @@ class CstParser extends BaseCstParser {
 
 		$.RULE("Block", () => {
 			$.CONSUME(Token.LBrace);
-			$.OPTION(() => {
+			$.MANY(() => {
 				$.SUBRULE($.BlockLevelStmt);
-				$.MANY(() => {
-					// FIXME: This isn't going to work...
-					//   FlowControlStmt < UniversalStmt < BlockLevelStmt
-					//   but FlowControlStmt doesn't terminate with a semicolon
-					$.CONSUME(Token.SemiColon);
-					$.SUBRULE1($.BlockLevelStmt);
-				});
-				$.OPTION1(() => {
-					$.CONSUME1(Token.SemiColon);
-				});
 			});
 			$.CONSUME(Token.RBrace);
 		});
@@ -229,6 +220,15 @@ class CstParser extends BaseCstParser {
 			this.quotedStringExpr(Token.DQuote);
 		});
 
+		$.RULE("Terminator", () => {
+			$.OR([{
+				GATE: () => $.LA(1).tokenType === Token.RBrace,
+				ALT: () => $.OPTION(() => $.CONSUME(Token.SemiColon)),
+			}, {
+				ALT: () => $.CONSUME1(Token.SemiColon),
+			}]);
+		});
+
 		this.performSelfAnalysis();
 	}
 
@@ -249,15 +249,17 @@ class CstParser extends BaseCstParser {
 	declare FunctionDefStmt: CstMethod;
 	declare ReturnStmt: CstMethod;
 
+	declare Parameters: CstMethod;
+	declare Parameter: CstMethod;
+	declare Block: CstMethod;
+
 	declare Expression: CstMethod;
 
 	declare StringExpr: CstMethod;
 	declare DQuotedStringExpr: CstMethod;
 	declare SQuotedStringExpr: CstMethod;
 
-	declare Parameters: CstMethod;
-	declare Parameter: CstMethod;
-	declare Block: CstMethod;
+	declare Terminator: CstMethod;
 
 	private quotedStringExpr(quote: TokenType) {
 		const $ = this;

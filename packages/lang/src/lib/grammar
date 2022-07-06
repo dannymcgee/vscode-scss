@@ -22,7 +22,7 @@ BlockLevelStmt
 	;
 
 VarDeclStmt
-	= Token.SassVar Token.Colon Expression Token.SemiColon
+	= Token.SassVar Token.Colon Expression Terminator
 	;
 
 FlowControlStmt
@@ -51,7 +51,7 @@ EachStmt
 SassDirectiveStmt
 	= ( Token.AtError | Token.AtWarn | Token.AtDebug )
 		QuotedStringExpr
-		Token.SemiColon
+		Terminator
 	;
 
 ModuleLoadStmt
@@ -62,7 +62,7 @@ ModuleLoadStmt
 	;
 
 ImportStmt
-	= Token.AtImport StringExpr Token.SemiColon
+	= Token.AtImport StringExpr Terminator
 	;
 
 MixinDefStmt
@@ -91,12 +91,7 @@ Parameter
 	;
 
 Block
-	= Token.LBrace
-		( BlockLevelStmt
-			( Token.SemiColon BlockLevelStmt )*
-			( Token.SemiColon )?
-		)?
-		Token.RBrace
+	= Token.LBrace ( BlockLevelStmt )* Token.RBrace
 	;
 
 Expression
@@ -114,4 +109,8 @@ SQuotedStringExpr
 
 DQuotedStringExpr
 	= Token.DQuote ( ~Token.DQuote )* Token.DQuote
+	;
+
+Terminator
+	= Token.SemiColon | (?= Token.RBrace )
 	;
