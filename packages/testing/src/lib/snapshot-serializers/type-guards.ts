@@ -1,4 +1,4 @@
-import { CstNode, ILexingResult, IToken } from "chevrotain";
+import { CstNode, ILexingResult, IRecognitionException, IToken } from "chevrotain";
 
 export function isLexingResult(value: unknown): value is ILexingResult {
 	const maybe = value as ILexingResult;
@@ -20,6 +20,15 @@ export function isCstNode(value: unknown): value is CstNode {
 		&& typeof maybe.name === "string"
 		&& "children" in value
 		&& isRecord(maybe.children);
+}
+
+export function isRecognitionException(value: unknown): value is IRecognitionException {
+	return typeof value === "object"
+		&& value !== null
+		&& "context" in value
+		&& "name" in value
+		&& "message" in value
+		&& "token" in value;
 }
 
 export function isToken(value: unknown): value is IToken {

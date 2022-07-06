@@ -87,6 +87,8 @@ const nodeField: TMGrammarScope = {
 		{ include: "#node" },
 		{ include: "#token" },
 		{ include: "#array" },
+		{ include: "#string" },
+		{ include: "#numbers" },
 		{ include: "#punctuation" },
 	],
 };
@@ -173,6 +175,8 @@ const array: TMGrammarScope = {
 		{ include: "#nodeKind" },
 		{ include: "#node" },
 		{ include: "#token" },
+		{ include: "#string" },
+		{ include: "#numbers" },
 		{ include: "#punctuation" },
 	],
 };

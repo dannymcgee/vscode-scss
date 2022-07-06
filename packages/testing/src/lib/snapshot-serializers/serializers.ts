@@ -1,12 +1,18 @@
 import type { Slice } from "@sassy/util";
-import type { CstNode, ILexingResult, IToken } from "chevrotain";
+import type { CstNode, ILexingResult, IRecognitionException, IToken } from "chevrotain";
 import { Span } from "@sassy/lang";
 import { isEmpty } from "lodash/fp";
 import { printListItems } from "pretty-format/build/collections";
 
 import type { SnapshotSerializer } from "./types";
 import { printObject } from "./print-helpers";
-import { isCstNode, isLexingResult, isRecord, isToken } from "./type-guards";
+import {
+	isCstNode,
+	isLexingResult,
+	isRecognitionException,
+	isRecord,
+	isToken,
+} from "./type-guards";
 
 type SerializeParams<T = unknown> =
 	Parameters<SnapshotSerializer<T>["serialize"]>;
@@ -72,6 +78,17 @@ export class CstNodeSerializer implements SnapshotSerializer<CstNode> {
 			return `(${name}${printObject(name, { children, recoveredNode }, ...rest)})`;
 		}
 		return `(${name}${printListItems(children, ...rest)})`;
+	}
+}
+
+export class RecognitionExceptionSerializer implements SnapshotSerializer<IRecognitionException> {
+	test = isRecognitionException;
+
+	serialize(
+		{ name, message, ...error }: IRecognitionException,
+		...rest: Slice<1, SerializeParams>
+	): string {
+		return printObject(name, { message, ...error }, ...rest);
 	}
 }
 

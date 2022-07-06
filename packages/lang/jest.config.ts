@@ -13,6 +13,9 @@ export default {
 		"^.+\\.[tj]s$": ["@swc/jest", swcJestConfig],
 	},
 	snapshotResolver: "@sassy/snapshot-resolver",
+	snapshotFormat: {
+		printBasicPrototype: false,
+	},
 	setupFilesAfterEnv: ["./jest-setup.ts"],
 	moduleFileExtensions: ["ts", "js", "html"],
 	coverageDirectory: "../../coverage/packages/lang",
