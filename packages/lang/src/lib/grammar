@@ -112,5 +112,6 @@ DQuotedStringExpr
 	;
 
 Terminator
-	= Token.SemiColon | (?= Token.RBrace )
+	= (?=> Token.RBrace ) Token.SemiColon?
+	| Token.SemiColon
 	;

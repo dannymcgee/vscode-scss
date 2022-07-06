@@ -205,13 +205,10 @@ class CstParser extends BaseCstParser {
 	});
 
 	StringExpr = this.RULE("StringExpr", () => {
-		this.OR([{
-			GATE: () => this.LA(1).tokenType === Token.SQuote,
-			ALT: () => this.SUBRULE(this.SQuotedStringExpr),
-		}, {
-			GATE: () => this.LA(1).tokenType === Token.DQuote,
-			ALT: () => this.SUBRULE(this.DQuotedStringExpr),
-		}]);
+		this.OR([
+			{ ALT: () => this.SUBRULE(this.SQuotedStringExpr) },
+			{ ALT: () => this.SUBRULE(this.DQuotedStringExpr) },
+		]);
 	});
 
 	SQuotedStringExpr = this.RULE("SQuotedStringExpr", () => {
