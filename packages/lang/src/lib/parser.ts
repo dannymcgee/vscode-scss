@@ -2,7 +2,7 @@
 import { Fn, KeysWhere } from "@sassy/util";
 import { CstNode, CstParser as ChevCstParser, TokenType } from "chevrotain";
 
-import { isQuote, Lexer, Token, TOKEN_VOCAB } from "./lexer";
+import { Lexer, Token, TOKEN_VOCAB } from "./lexer";
 
 type CstMethod<Params extends unknown[] = []> =
 	Fn<Params, CstNode>;
@@ -73,7 +73,7 @@ class CstParser extends BaseCstParser {
 		$.RULE("FlowControlStmt", () => {
 			$.OR([
 				{ ALT: () => $.SUBRULE($.IfStmt) },
-//				{ ALT: () => $.SUBRULE($.EachStmt) },
+				{ ALT: () => $.SUBRULE($.EachStmt) },
 //				{ ALT: () => $.SUBRULE($.ForStmt) },
 //				{ ALT: () => $.SUBRULE($.WhileStmt) },
 			]);
@@ -97,19 +97,32 @@ class CstParser extends BaseCstParser {
 			$.SUBRULE($.Block);
 		});
 
+		$.RULE("EachStmt", () => {
+			$.CONSUME(Token.AtEach);
+			$.AT_LEAST_ONE_SEP({
+				SEP: Token.Comma,
+				DEF: () => {
+					$.CONSUME(Token.SassVar);
+				},
+			});
+			$.CONSUME(Token.In);
+			$.SUBRULE($.Expression);
+			$.SUBRULE($.Block);
+		});
+
 		$.RULE("SassDirectiveStmt", () => {
 			$.OR([
 				{ ALT: () => $.CONSUME(Token.AtError) },
 				{ ALT: () => $.CONSUME(Token.AtWarn) },
 				{ ALT: () => $.CONSUME(Token.AtDebug) },
 			]);
-			$.SUBRULE($.QuotedStringExpr);
+			$.SUBRULE($.StringExpr);
 			$.CONSUME(Token.SemiColon);
 		});
 
 		$.RULE("ModuleLoadStmt", () => {
 			$.CONSUME(Token.AtUse);
-			$.SUBRULE($.QuotedStringExpr);
+			$.SUBRULE($.StringExpr);
 			$.OPTION(() => {
 				$.CONSUME(Token.As);
 				$.OR([
@@ -193,20 +206,12 @@ class CstParser extends BaseCstParser {
 
 		$.RULE("Expression", () => {
 			$.OR([
+				{ ALT: () => $.CONSUME(Token.SassVar) },
 				{ ALT: () => $.SUBRULE($.StringExpr) },
 			]);
 		});
 
 		$.RULE("StringExpr", () => {
-			$.OR([{
-				ALT: () => $.SUBRULE($.QuotedStringExpr)
-			}, {
-				GATE: () => !isQuote($.LA(1).tokenType),
-				ALT: () => $.SUBRULE($.UnquotedStringExpr)
-			}]);
-		});
-
-		$.RULE("QuotedStringExpr", () => {
 			$.OR([{
 				GATE: () => $.LA(1).tokenType === Token.SQuote,
 				ALT: () => $.SUBRULE($.SQuotedStringExpr),
@@ -224,12 +229,6 @@ class CstParser extends BaseCstParser {
 			this.quotedStringExpr(Token.DQuote);
 		});
 
-		$.RULE("UnquotedStringExpr", () => {
-			$.AT_LEAST_ONE(() => {
-				$.NOT(Token.SemiColon);
-			});
-		});
-
 		this.performSelfAnalysis();
 	}
 
@@ -242,6 +241,7 @@ class CstParser extends BaseCstParser {
 	declare FlowControlStmt: CstMethod;
 	declare IfStmt: CstMethod;
 	declare ElseClause: CstMethod;
+	declare EachStmt: CstMethod;
 	declare SassDirectiveStmt: CstMethod;
 	declare ModuleLoadStmt: CstMethod;
 	declare ImportStmt: CstMethod;
@@ -252,10 +252,8 @@ class CstParser extends BaseCstParser {
 	declare Expression: CstMethod;
 
 	declare StringExpr: CstMethod;
-	declare QuotedStringExpr: CstMethod;
 	declare DQuotedStringExpr: CstMethod;
 	declare SQuotedStringExpr: CstMethod;
-	declare UnquotedStringExpr: CstMethod;
 
 	declare Parameters: CstMethod;
 	declare Parameter: CstMethod;

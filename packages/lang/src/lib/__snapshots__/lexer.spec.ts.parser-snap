@@ -843,7 +843,7 @@ exports[`Lexer test files: electric/elx/_util.scss 1`] = `
   "{" (LBrace (1:(28,29))),
   "@each" (AtEach (2:(1,6))),
   "$property" (SassVar (2:(7,16))),
-  "in" (Keyword (2:(17,19))),
+  "in" (In (2:(17,19))),
   "$properties" (SassVar (2:(20,31))),
   "{" (LBrace (2:(32,33))),
   "#{" (HashBrace (3:(2,4))),

@@ -1,11 +1,157 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Parser parses @each statements 1`] = `
+(SourceFile
+  (UniversalStmt
+    (FlowControlStmt
+      (EachStmt
+        "@each" (AtEach (1:(0,5))),
+        "$item" (SassVar (1:(6,11))),
+        "in" (In (1:(12,14))),
+        (Expression
+          "$list" (SassVar (1:(15,20))),
+        ),
+        (Block
+          "{" (LBrace (1:(21,22))),
+          "}" (RBrace (1:(22,23))),
+        ),
+      ),
+    ),
+  ),
+)
+`;
+
+exports[`Parser parses @each statements with destructuring 1`] = `
+(SourceFile
+  (UniversalStmt
+    (FlowControlStmt
+      (EachStmt
+        "@each" (AtEach (2:(2,7))),
+        "$key" (SassVar (2:(8,12))),
+        "," (Comma (2:(12,13))),
+        "$value" (SassVar (2:(14,20))),
+        "in" (In (2:(21,23))),
+        (Expression
+          "$map" (SassVar (2:(24,28))),
+        ),
+        (Block
+          "{" (LBrace (2:(29,30))),
+          "}" (RBrace (2:(30,31))),
+        ),
+      ),
+    ),
+  ),
+  (UniversalStmt
+    (FlowControlStmt
+      (EachStmt
+        "@each" (AtEach (3:(2,7))),
+        "$foo" (SassVar (3:(8,12))),
+        "," (Comma (3:(12,13))),
+        "$bar" (SassVar (3:(14,18))),
+        "," (Comma (3:(18,19))),
+        "$baz" (SassVar (3:(20,24))),
+        "in" (In (3:(25,27))),
+        (Expression
+          "$lists" (SassVar (3:(28,34))),
+        ),
+        (Block
+          "{" (LBrace (3:(35,36))),
+          "}" (RBrace (3:(36,37))),
+        ),
+      ),
+    ),
+  ),
+)
+`;
+
+exports[`Parser parses @if / @else if / @else statements 1`] = `
+(SourceFile
+  (UniversalStmt
+    (FlowControlStmt
+      (IfStmt
+        "@if" (AtIf (2:(2,5))),
+        (Expression
+          "$foo" (SassVar (2:(6,10))),
+        ),
+        (Block
+          "{" (LBrace (2:(11,12))),
+          "}" (RBrace (3:(2,3))),
+        ),
+        (ElseClause
+          "@else" (AtElse (3:(4,9))),
+          "if" (If (3:(10,12))),
+          (Expression
+            "$bar" (SassVar (3:(13,17))),
+          ),
+          (Block
+            "{" (LBrace (3:(18,19))),
+            "}" (RBrace (4:(2,3))),
+          ),
+        ),
+        (ElseClause
+          "@else" (AtElse (4:(4,9))),
+          (Block
+            "{" (LBrace (4:(10,11))),
+            "}" (RBrace (5:(2,3))),
+          ),
+        ),
+      ),
+    ),
+  ),
+)
+`;
+
+exports[`Parser parses @if / @else statements 1`] = `
+(SourceFile
+  (UniversalStmt
+    (FlowControlStmt
+      (IfStmt
+        "@if" (AtIf (2:(2,5))),
+        (Expression
+          "$condition" (SassVar (2:(6,16))),
+        ),
+        (Block
+          "{" (LBrace (2:(17,18))),
+          "}" (RBrace (3:(2,3))),
+        ),
+        (ElseClause
+          "@else" (AtElse (3:(4,9))),
+          (Block
+            "{" (LBrace (3:(10,11))),
+            "}" (RBrace (4:(2,3))),
+          ),
+        ),
+      ),
+    ),
+  ),
+)
+`;
+
+exports[`Parser parses @if statements 1`] = `
+(SourceFile
+  (UniversalStmt
+    (FlowControlStmt
+      (IfStmt
+        "@if" (AtIf (1:(0,3))),
+        (Expression
+          "$condition" (SassVar (1:(4,14))),
+        ),
+        (Block
+          "{" (LBrace (1:(15,16))),
+          "}" (RBrace (1:(16,17))),
+        ),
+      ),
+    ),
+  ),
+)
+`;
+
 exports[`Parser parses Sass directive statements 1`] = `
 (SourceFile
   (UniversalStmt
     (SassDirectiveStmt
       "@error" (AtError (2:(3,9))),
-      (QuotedStringExpr
+      (StringExpr
         (DQuotedStringExpr
           '"' (DQuote (2:(10,11))),
           "This" (Ident (2:(11,15))),
@@ -22,7 +168,7 @@ exports[`Parser parses Sass directive statements 1`] = `
   (UniversalStmt
     (SassDirectiveStmt
       "@warn" (AtWarn (3:(3,8))),
-      (QuotedStringExpr
+      (StringExpr
         (DQuotedStringExpr
           '"' (DQuote (3:(9,10))),
           "This" (Ident (3:(10,14))),
@@ -39,7 +185,7 @@ exports[`Parser parses Sass directive statements 1`] = `
   (UniversalStmt
     (SassDirectiveStmt
       "@debug" (AtDebug (4:(3,9))),
-      (QuotedStringExpr
+      (StringExpr
         (DQuotedStringExpr
           '"' (DQuote (4:(10,11))),
           "This" (Ident (4:(11,15))),
@@ -71,11 +217,11 @@ exports[`Parser parses function definitions 1`] = `
       ),
       (Block
         "{" (LBrace (2:(25,26))),
-        (ReturnStmt
-          "@return" (AtReturn (3:(3,10))),
-          (Expression
-            (StringExpr
-              (QuotedStringExpr
+        (BlockLevelStmt
+          (ReturnStmt
+            "@return" (AtReturn (3:(3,10))),
+            (Expression
+              (StringExpr
                 (DQuotedStringExpr
                   '"' (DQuote (3:(11,12))),
                   "Hello" (Ident (3:(12,17))),
@@ -98,112 +244,22 @@ exports[`Parser parses function definitions 1`] = `
 )
 `;
 
-exports[`Parser parses if statements with multiple else clauses 1`] = `
-(SourceFile
-  (UniversalStmt
-    (FlowControlStmt
-      (IfStmt
-        "@if" (AtIf (2:(2,5))),
-        (Expression
-          (StringExpr
-            (QuotedStringExpr
-              (DQuotedStringExpr
-                '"' (DQuote (2:(6,7))),
-                "hello" (Ident (2:(7,12))),
-                '"' (DQuote (2:(12,13))),
-              ),
-            ),
-          ),
-        ),
-        (Block
-          "{" (LBrace (2:(14,15))),
-          "}" (RBrace (3:(2,3))),
-        ),
-        (ElseClause
-          "@else" (AtElse (3:(4,9))),
-          "if" (If (3:(10,12))),
-          (Expression
-            (StringExpr
-              (QuotedStringExpr
-                (DQuotedStringExpr
-                  '"' (DQuote (3:(13,14))),
-                  "hello" (Ident (3:(14,19))),
-                  "again" (Ident (3:(20,25))),
-                  '"' (DQuote (3:(25,26))),
-                ),
-              ),
-            ),
-          ),
-          (Block
-            "{" (LBrace (3:(27,28))),
-            "}" (RBrace (4:(2,3))),
-          ),
-        ),
-        (ElseClause
-          "@else" (AtElse (4:(4,9))),
-          (Block
-            "{" (LBrace (4:(10,11))),
-            "}" (RBrace (5:(2,3))),
-          ),
-        ),
-      ),
-    ),
-  ),
-)
-`;
-
-exports[`Parser parses if/else statements 1`] = `
-(SourceFile
-  (UniversalStmt
-    (FlowControlStmt
-      (IfStmt
-        "@if" (AtIf (2:(2,5))),
-        (Expression
-          (StringExpr
-            (QuotedStringExpr
-              (DQuotedStringExpr
-                '"' (DQuote (2:(6,7))),
-                "hello" (Ident (2:(7,12))),
-                '"' (DQuote (2:(12,13))),
-              ),
-            ),
-          ),
-        ),
-        (Block
-          "{" (LBrace (2:(14,15))),
-          "}" (RBrace (3:(2,3))),
-        ),
-        (ElseClause
-          "@else" (AtElse (3:(4,9))),
-          (Block
-            "{" (LBrace (3:(10,11))),
-            "}" (RBrace (4:(2,3))),
-          ),
-        ),
-      ),
-    ),
-  ),
-)
-`;
-
 exports[`Parser parses import statements 1`] = `
 (SourceFile
   (TopLevelStmt
     (ImportStmt
       "@import" (AtImport (1:(0,7))),
       (StringExpr
-        (QuotedStringExpr
-          (DQuotedStringExpr
-            '"' (DQuote (1:(8,9))),
-            "path" (Ident (1:(9,13))),
-            "/" (Slash (1:(13,14))),
-            "to" (Keyword (1:(14,16))),
-            "/" (Slash (1:(16,17))),
-            "stylesheet" (Ident (1:(17,27))),
-            "." (Dot (1:(27,28))),
-            "css" (Ident (1:(28,31))),
-            '"' (DQuote (1:(31,32))),
-          ),
+        (DQuotedStringExpr
+          '"' (DQuote (1:(8,9))),
+          "path" (Ident (1:(9,13))),
+          "/" (Slash (1:(13,14))),
+          "to" (Keyword (1:(14,16))),
+          "/" (Slash (1:(16,17))),
+          "stylesheet" (Ident (1:(17,27))),
+          "." (Dot (1:(27,28))),
+          "css" (Ident (1:(28,31))),
+          '"' (DQuote (1:(31,32))),
         ),
       ),
       ";" (SemiColon (1:(32,33))),
@@ -236,7 +292,7 @@ exports[`Parser parses module load statements 1`] = `
   (TopLevelStmt
     (ModuleLoadStmt
       "@use" (AtUse (1:(0,4))),
-      (QuotedStringExpr
+      (StringExpr
         (DQuotedStringExpr
           '"' (DQuote (1:(5,6))),
           "sass" (Ident (1:(6,10))),
@@ -327,47 +383,15 @@ exports[`Parser parses parameters with default values 1`] = `
     ":" (Colon (1:(11,12))),
     (Expression
       (StringExpr
-        (QuotedStringExpr
-          (DQuotedStringExpr
-            '"' (DQuote (1:(13,14))),
-            "hello" (Ident (1:(14,19))),
-            '"' (DQuote (1:(19,20))),
-          ),
+        (DQuotedStringExpr
+          '"' (DQuote (1:(13,14))),
+          "hello" (Ident (1:(14,19))),
+          '"' (DQuote (1:(19,20))),
         ),
       ),
     ),
   ),
   ")" (RParen (1:(20,21))),
-)
-`;
-
-exports[`Parser parses simple if statements 1`] = `
-(SourceFile
-  (UniversalStmt
-    (FlowControlStmt
-      (IfStmt
-        "@if" (AtIf (1:(0,3))),
-        (Expression
-          (StringExpr
-            (QuotedStringExpr
-              (DQuotedStringExpr
-                '"' (DQuote (1:(4,5))),
-                "hello" (Ident (1:(5,10))),
-                "this" (Ident (1:(11,15))),
-                "is" (Ident (1:(16,18))),
-                "expression" (Ident (1:(19,29))),
-                '"' (DQuote (1:(29,30))),
-              ),
-            ),
-          ),
-        ),
-        (Block
-          "{" (LBrace (1:(31,32))),
-          "}" (RBrace (1:(32,33))),
-        ),
-      ),
-    ),
-  ),
 )
 `;
 
@@ -394,15 +418,13 @@ exports[`Parser parses variable declaration statements 1`] = `
       ":" (Colon (1:(6,7))),
       (Expression
         (StringExpr
-          (QuotedStringExpr
-            (DQuotedStringExpr
-              '"' (DQuote (1:(8,9))),
-              "Hello" (Ident (1:(9,14))),
-              "," (Comma (1:(14,15))),
-              "world" (Ident (1:(16,21))),
-              "!" (Bang (1:(21,22))),
-              '"' (DQuote (1:(22,23))),
-            ),
+          (DQuotedStringExpr
+            '"' (DQuote (1:(8,9))),
+            "Hello" (Ident (1:(9,14))),
+            "," (Comma (1:(14,15))),
+            "world" (Ident (1:(16,21))),
+            "!" (Bang (1:(21,22))),
+            '"' (DQuote (1:(22,23))),
           ),
         ),
       ),

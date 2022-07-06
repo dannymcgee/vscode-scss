@@ -27,7 +27,7 @@ VarDeclStmt
 
 FlowControlStmt
 	= IfStmt
-#	| EachStmt
+	| EachStmt
 #	| ForStmt
 #	| WhileStmt
 	;
@@ -38,6 +38,14 @@ IfStmt
 
 ElseClause
 	= Token.AtElse ( Token.If Expression )? Block
+	;
+
+EachStmt
+	= Token.AtEach
+		( Token.SassVar )[Token.Comma]+
+		Token.In
+		Expression
+		Block
 	;
 
 SassDirectiveStmt
@@ -92,14 +100,11 @@ Block
 	;
 
 Expression
-	= StringExpr
+	= Token.SassVar
+	| StringExpr
 	;
 
 StringExpr
-	= QuotedStringExpr | UnquotedStringExpr
-	;
-
-QuotedStringExpr
 	= SQuotedStringExpr | DQuotedStringExpr
 	;
 
@@ -109,8 +114,4 @@ SQuotedStringExpr
 
 DQuotedStringExpr
 	= Token.DQuote ( ~Token.DQuote )* Token.DQuote
-	;
-
-UnquotedStringExpr
-	= ( ~Token.SemiColon )+
 	;

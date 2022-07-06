@@ -24,7 +24,7 @@ export class Token {
 	@token(IDENT)
 	static Ident: TokenType;
 
-	@token(re`/(else|from|through|to|in)${WB}/`, { longer_alt: Token.Ident })
+	@token(re`/(else|from|through|to)${WB}/`, { longer_alt: Token.Ident })
 	static Keyword: TokenType;
 
 	@token(re`/(as)${WB}/`, { longer_alt: Token.Ident })
@@ -100,6 +100,9 @@ export class Token {
 
 	@token(/@each/, { longer_alt: Token.AtWord })
 	static AtEach: TokenType;
+
+	@token(re`/(in)${WB}/`, { longer_alt: Token.Ident })
+	static In: TokenType;
 
 	@token(/@for/, { longer_alt: Token.AtWord })
 	static AtFor: TokenType;
@@ -266,6 +269,7 @@ export const TOKEN_VOCAB = [
 	Token.AtElse,
 	Token.If,
 	Token.AtEach,
+	Token.In,
 	Token.AtFor,
 	Token.AtWhile,
 	Token.AtWord,
@@ -314,7 +318,3 @@ export const TOKEN_VOCAB = [
 ] as const;
 
 export const Lexer = new ChevLexer(TOKEN_VOCAB.slice());
-
-export function isQuote(type: TokenType): boolean {
-	return type === Token.SQuote || type === Token.DQuote;
-}

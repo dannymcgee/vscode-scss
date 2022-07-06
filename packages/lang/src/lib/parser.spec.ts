@@ -96,16 +96,16 @@ describe("Parser", () => {
 		expect(result).toMatchSnapshot();
 	});
 
-	it("parses simple if statements", () => {
-		const input = `@if "hello this is expression" {}`;
+	it("parses @if statements", () => {
+		const input = `@if $condition {}`;
 		const result = parser.parse(input);
 
 		expect(result).toMatchSnapshot();
 	});
 
-	it("parses if/else statements", () => {
+	it("parses @if / @else statements", () => {
 		const input = `
-		@if "hello" {
+		@if $condition {
 		} @else {
 		}`;
 		const result = parser.parse(input);
@@ -113,12 +113,28 @@ describe("Parser", () => {
 		expect(result).toMatchSnapshot();
 	});
 
-	it("parses if statements with multiple else clauses", () => {
+	it("parses @if / @else if / @else statements", () => {
 		const input = `
-		@if "hello" {
-		} @else if "hello again" {
+		@if $foo {
+		} @else if $bar {
 		} @else {
 		}`;
+		const result = parser.parse(input);
+
+		expect(result).toMatchSnapshot();
+	});
+
+	it("parses @each statements", () => {
+		const input = `@each $item in $list {}`;
+		const result = parser.parse(input);
+
+		expect(result).toMatchSnapshot();
+	});
+
+	it("parses @each statements with destructuring", () => {
+		const input = `
+		@each $key, $value in $map {}
+		@each $foo, $bar, $baz in $lists {}`;
 		const result = parser.parse(input);
 
 		expect(result).toMatchSnapshot();
