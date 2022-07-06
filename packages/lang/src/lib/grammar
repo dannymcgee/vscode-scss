@@ -52,7 +52,7 @@ Parameters
 	= Token.LParen
 		( Parameter
 			( Token.Comma Parameter )*
-			( Token.Comma )?
+			( Token.Comma | Token.Ellipsis )?
 		)?
 		Token.RParen
 	;

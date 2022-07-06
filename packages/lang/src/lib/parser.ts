@@ -121,7 +121,10 @@ class CstParser extends BaseCstParser {
 					$.SUBRULE1($.Parameter);
 				});
 				$.OPTION1(() => {
-					$.CONSUME1(Token.Comma);
+					$.OR([
+						{ ALT: () => $.CONSUME1(Token.Comma) },
+						{ ALT: () => $.CONSUME(Token.Ellipsis) },
+					]);
 				});
 			});
 			$.CONSUME(Token.RParen);

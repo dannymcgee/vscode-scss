@@ -163,6 +163,25 @@ exports[`Parser parses module load statements 1`] = `
 )
 `;
 
+exports[`Parser parses parameter lists 1`] = `
+(Parameters
+  "(" (LParen (1:(0,1))),
+  (Parameter
+    "$foo" (SassVar (1:(1,5))),
+  ),
+  "," (Comma (1:(5,6))),
+  (Parameter
+    "$bar" (SassVar (1:(7,11))),
+  ),
+  "," (Comma (1:(11,12))),
+  (Parameter
+    "$baz" (SassVar (1:(13,17))),
+  ),
+  "..." (Ellipsis (1:(17,20))),
+  ")" (RParen (1:(20,21))),
+)
+`;
+
 exports[`Parser parses parameterized mixin definitions 1`] = `
 (SourceFile
   (TopLevelStmt
@@ -193,17 +212,17 @@ exports[`Parser parses parameters with a trailing comma 1`] = `
 (Parameters
   "(" (LParen (2:(2,3))),
   (Parameter
-    "$bar" (SassVar (3:(3,7))),
+    "$foo" (SassVar (3:(3,7))),
   ),
   "," (Comma (3:(7,8))),
   (Parameter
-    "$baz" (SassVar (4:(3,7))),
+    "$bar" (SassVar (4:(3,7))),
   ),
   "," (Comma (4:(7,8))),
   (Parameter
-    "$foobar" (SassVar (5:(3,10))),
+    "$baz" (SassVar (5:(3,7))),
   ),
-  "," (Comma (5:(10,11))),
+  "," (Comma (5:(7,8))),
   ")" (RParen (6:(2,3))),
 )
 `;
@@ -212,11 +231,11 @@ exports[`Parser parses parameters with default values 1`] = `
 (Parameters
   "(" (LParen (1:(0,1))),
   (Parameter
-    "$bar" (SassVar (1:(1,5))),
+    "$foo" (SassVar (1:(1,5))),
   ),
   "," (Comma (1:(5,6))),
   (Parameter
-    "$baz" (SassVar (1:(7,11))),
+    "$bar" (SassVar (1:(7,11))),
     ":" (Colon (1:(11,12))),
     (Expression
       (StringExpr

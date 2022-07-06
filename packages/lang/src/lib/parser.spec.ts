@@ -63,9 +63,9 @@ describe("Parser", () => {
 	it("parses parameters with a trailing comma", () => {
 		const input = `
 		(
+			$foo,
 			$bar,
 			$baz,
-			$foobar,
 		)`;
 		const result = parser.parse(input, "Parameters");
 
@@ -73,7 +73,14 @@ describe("Parser", () => {
 	});
 
 	it("parses parameters with default values", () => {
-		const input = `($bar, $baz: "hello")`;
+		const input = `($foo, $bar: "hello")`;
+		const result = parser.parse(input, "Parameters");
+
+		expect(result).toMatchSnapshot();
+	});
+
+	it("parses parameter lists", () => {
+		const input = `($foo, $bar, $baz...)`;
 		const result = parser.parse(input, "Parameters");
 
 		expect(result).toMatchSnapshot();

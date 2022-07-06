@@ -152,6 +152,9 @@ export class Token {
 	))
 	static NumLiteral: TokenType;
 
+	@token(/\.\.\./)
+	static Ellipsis: TokenType;
+
 	@token(/\./)
 	static Dot: TokenType;
 
@@ -274,6 +277,7 @@ export const TOKEN_VOCAB = [
 	Token.LParen,
 	Token.RParen,
 	// Punctuation
+	Token.Ellipsis,
 	Token.Dot,
 	Token.Hash,
 	Token.ColonColon,
