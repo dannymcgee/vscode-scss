@@ -41,7 +41,7 @@ class CstParser extends BaseCstParser {
 		$.RULE("UniversalStmt", () => {
 			$.OR([
 				{ ALT: () => $.SUBRULE($.VarDeclStmt) },
-//				{ ALT: () => $.SUBRULE($.FlowControlStmt) },
+				{ ALT: () => $.SUBRULE($.FlowControlStmt) },
 				{ ALT: () => $.SUBRULE($.SassDirectiveStmt) },
 			]);
 		});
@@ -55,11 +55,46 @@ class CstParser extends BaseCstParser {
 			]);
 		});
 
+		$.RULE("BlockLevelStmt", () => {
+			$.OR([
+				{ ALT: () => $.SUBRULE($.UniversalStmt) },
+//				{ ALT: () => $.SUBRULE($.CssStmt) },
+				{ ALT: () => $.SUBRULE($.ReturnStmt) },
+			]);
+		});
+
 		$.RULE("VarDeclStmt", () => {
 			$.CONSUME(Token.SassVar);
 			$.CONSUME(Token.Colon);
 			$.SUBRULE($.Expression);
 			$.CONSUME(Token.SemiColon);
+		});
+
+		$.RULE("FlowControlStmt", () => {
+			$.OR([
+				{ ALT: () => $.SUBRULE($.IfStmt) },
+//				{ ALT: () => $.SUBRULE($.EachStmt) },
+//				{ ALT: () => $.SUBRULE($.ForStmt) },
+//				{ ALT: () => $.SUBRULE($.WhileStmt) },
+			]);
+		});
+
+		$.RULE("IfStmt", () => {
+			$.CONSUME(Token.AtIf);
+			$.SUBRULE($.Expression);
+			$.SUBRULE($.Block);
+			$.MANY(() => {
+				$.SUBRULE($.ElseClause);
+			});
+		});
+
+		$.RULE("ElseClause", () => {
+			$.CONSUME(Token.AtElse);
+			$.OPTION(() => {
+				$.CONSUME(Token.If);
+				$.SUBRULE($.Expression);
+			});
+			$.SUBRULE($.Block);
 		});
 
 		$.RULE("SassDirectiveStmt", () => {
@@ -97,14 +132,14 @@ class CstParser extends BaseCstParser {
 			$.OPTION(() => {
 				$.SUBRULE($.Parameters);
 			});
-			$.SUBRULE($.RuleBlock);
+			$.SUBRULE($.Block);
 		});
 
 		$.RULE("FunctionDefStmt", () => {
 			$.CONSUME(Token.AtFunction);
 			$.CONSUME(Token.Ident);
 			$.SUBRULE($.Parameters);
-			$.SUBRULE($.FunctionBody);
+			$.SUBRULE($.Block);
 		});
 
 		$.RULE("ReturnStmt", () => {
@@ -138,25 +173,16 @@ class CstParser extends BaseCstParser {
 			});
 		});
 
-		$.RULE("RuleBlock", () => {
-			$.CONSUME(Token.LBrace);
-			// TODO
-			$.CONSUME(Token.RBrace);
-		});
-
-		$.RULE("FunctionBody", () => {
+		$.RULE("Block", () => {
 			$.CONSUME(Token.LBrace);
 			$.OPTION(() => {
-				$.OR([
-					{ ALT: () => $.SUBRULE($.UniversalStmt) },
-					{ ALT: () => $.SUBRULE($.ReturnStmt) },
-				]);
+				$.SUBRULE($.BlockLevelStmt);
 				$.MANY(() => {
+					// FIXME: This isn't going to work...
+					//   FlowControlStmt < UniversalStmt < BlockLevelStmt
+					//   but FlowControlStmt doesn't terminate with a semicolon
 					$.CONSUME(Token.SemiColon);
-					$.OR1([
-						{ ALT: () => $.SUBRULE1($.UniversalStmt) },
-						{ ALT: () => $.SUBRULE1($.ReturnStmt) },
-					]);
+					$.SUBRULE1($.BlockLevelStmt);
 				});
 				$.OPTION1(() => {
 					$.CONSUME1(Token.SemiColon);
@@ -211,7 +237,11 @@ class CstParser extends BaseCstParser {
 
 	declare UniversalStmt: CstMethod;
 	declare TopLevelStmt: CstMethod;
+	declare BlockLevelStmt: CstMethod;
 	declare VarDeclStmt: CstMethod;
+	declare FlowControlStmt: CstMethod;
+	declare IfStmt: CstMethod;
+	declare ElseClause: CstMethod;
 	declare SassDirectiveStmt: CstMethod;
 	declare ModuleLoadStmt: CstMethod;
 	declare ImportStmt: CstMethod;
@@ -229,8 +259,7 @@ class CstParser extends BaseCstParser {
 
 	declare Parameters: CstMethod;
 	declare Parameter: CstMethod;
-	declare RuleBlock: CstMethod;
-	declare FunctionBody: CstMethod;
+	declare Block: CstMethod;
 
 	private quotedStringExpr(quote: TokenType) {
 		const $ = this;

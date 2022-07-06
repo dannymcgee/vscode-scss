@@ -69,7 +69,7 @@ exports[`Parser parses function definitions 1`] = `
         ),
         ")" (RParen (2:(23,24))),
       ),
-      (FunctionBody
+      (Block
         "{" (LBrace (2:(25,26))),
         (ReturnStmt
           "@return" (AtReturn (3:(3,10))),
@@ -92,6 +92,94 @@ exports[`Parser parses function definitions 1`] = `
         ),
         ";" (SemiColon (3:(29,30))),
         "}" (RBrace (4:(2,3))),
+      ),
+    ),
+  ),
+)
+`;
+
+exports[`Parser parses if statements with multiple else clauses 1`] = `
+(SourceFile
+  (UniversalStmt
+    (FlowControlStmt
+      (IfStmt
+        "@if" (AtIf (2:(2,5))),
+        (Expression
+          (StringExpr
+            (QuotedStringExpr
+              (DQuotedStringExpr
+                '"' (DQuote (2:(6,7))),
+                "hello" (Ident (2:(7,12))),
+                '"' (DQuote (2:(12,13))),
+              ),
+            ),
+          ),
+        ),
+        (Block
+          "{" (LBrace (2:(14,15))),
+          "}" (RBrace (3:(2,3))),
+        ),
+        (ElseClause
+          "@else" (AtElse (3:(4,9))),
+          "if" (If (3:(10,12))),
+          (Expression
+            (StringExpr
+              (QuotedStringExpr
+                (DQuotedStringExpr
+                  '"' (DQuote (3:(13,14))),
+                  "hello" (Ident (3:(14,19))),
+                  "again" (Ident (3:(20,25))),
+                  '"' (DQuote (3:(25,26))),
+                ),
+              ),
+            ),
+          ),
+          (Block
+            "{" (LBrace (3:(27,28))),
+            "}" (RBrace (4:(2,3))),
+          ),
+        ),
+        (ElseClause
+          "@else" (AtElse (4:(4,9))),
+          (Block
+            "{" (LBrace (4:(10,11))),
+            "}" (RBrace (5:(2,3))),
+          ),
+        ),
+      ),
+    ),
+  ),
+)
+`;
+
+exports[`Parser parses if/else statements 1`] = `
+(SourceFile
+  (UniversalStmt
+    (FlowControlStmt
+      (IfStmt
+        "@if" (AtIf (2:(2,5))),
+        (Expression
+          (StringExpr
+            (QuotedStringExpr
+              (DQuotedStringExpr
+                '"' (DQuote (2:(6,7))),
+                "hello" (Ident (2:(7,12))),
+                '"' (DQuote (2:(12,13))),
+              ),
+            ),
+          ),
+        ),
+        (Block
+          "{" (LBrace (2:(14,15))),
+          "}" (RBrace (3:(2,3))),
+        ),
+        (ElseClause
+          "@else" (AtElse (3:(4,9))),
+          (Block
+            "{" (LBrace (3:(10,11))),
+            "}" (RBrace (4:(2,3))),
+          ),
+        ),
       ),
     ),
   ),
@@ -134,7 +222,7 @@ exports[`Parser parses mixin definitions with empty param lists 1`] = `
         "(" (LParen (1:(10,11))),
         ")" (RParen (1:(11,12))),
       ),
-      (RuleBlock
+      (Block
         "{" (LBrace (1:(13,14))),
         "}" (RBrace (1:(14,15))),
       ),
@@ -199,7 +287,7 @@ exports[`Parser parses parameterized mixin definitions 1`] = `
         ),
         ")" (RParen (1:(21,22))),
       ),
-      (RuleBlock
+      (Block
         "{" (LBrace (1:(23,24))),
         "}" (RBrace (1:(24,25))),
       ),
@@ -253,13 +341,43 @@ exports[`Parser parses parameters with default values 1`] = `
 )
 `;
 
+exports[`Parser parses simple if statements 1`] = `
+(SourceFile
+  (UniversalStmt
+    (FlowControlStmt
+      (IfStmt
+        "@if" (AtIf (1:(0,3))),
+        (Expression
+          (StringExpr
+            (QuotedStringExpr
+              (DQuotedStringExpr
+                '"' (DQuote (1:(4,5))),
+                "hello" (Ident (1:(5,10))),
+                "this" (Ident (1:(11,15))),
+                "is" (Ident (1:(16,18))),
+                "expression" (Ident (1:(19,29))),
+                '"' (DQuote (1:(29,30))),
+              ),
+            ),
+          ),
+        ),
+        (Block
+          "{" (LBrace (1:(31,32))),
+          "}" (RBrace (1:(32,33))),
+        ),
+      ),
+    ),
+  ),
+)
+`;
+
 exports[`Parser parses simple mixin definitions 1`] = `
 (SourceFile
   (TopLevelStmt
     (MixinDefStmt
       "@mixin" (AtMixin (1:(0,6))),
       "foo" (Ident (1:(7,10))),
-      (RuleBlock
+      (Block
         "{" (LBrace (1:(11,12))),
         "}" (RBrace (1:(12,13))),
       ),

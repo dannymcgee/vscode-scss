@@ -4,7 +4,7 @@ SourceFile
 
 UniversalStmt
 	= VarDeclStmt
-#	| FlowControlStmt
+	| FlowControlStmt
 	| SassDirectiveStmt
 	;
 
@@ -15,8 +15,29 @@ TopLevelStmt
 	| FunctionDefStmt
 	;
 
+BlockLevelStmt
+	= UniversalStmt
+#	| CssStmt
+	| ReturnStmt
+	;
+
 VarDeclStmt
 	= Token.SassVar Token.Colon Expression Token.SemiColon
+	;
+
+FlowControlStmt
+	= IfStmt
+#	| EachStmt
+#	| ForStmt
+#	| WhileStmt
+	;
+
+IfStmt
+	= Token.AtIf Expression Block ( ElseClause )*
+	;
+
+ElseClause
+	= Token.AtElse ( Token.If Expression )? Block
 	;
 
 SassDirectiveStmt
@@ -61,19 +82,10 @@ Parameter
 	= Token.SassVar ( Token.Colon Expression )?
 	;
 
-RuleBlock
+Block
 	= Token.LBrace
-#		(( UniversalStmt | CssStmt )
-#			( Token.SemiColon ( UniversalStmt | CssStmt ))*
-#			( Token.SemiColon )?
-#		)?
-		Token.RBrace
-	;
-
-FunctionBody
-	= Token.LBrace
-		(( UniversalStmt | ReturnStmt )
-			( Token.SemiColon ( UniversalStmt | ReturnStmt ))*
+		( BlockLevelStmt
+			( Token.SemiColon BlockLevelStmt )*
 			( Token.SemiColon )?
 		)?
 		Token.RBrace

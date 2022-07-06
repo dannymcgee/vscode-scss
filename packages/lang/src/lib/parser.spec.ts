@@ -95,4 +95,32 @@ describe("Parser", () => {
 
 		expect(result).toMatchSnapshot();
 	});
+
+	it("parses simple if statements", () => {
+		const input = `@if "hello this is expression" {}`;
+		const result = parser.parse(input);
+
+		expect(result).toMatchSnapshot();
+	});
+
+	it("parses if/else statements", () => {
+		const input = `
+		@if "hello" {
+		} @else {
+		}`;
+		const result = parser.parse(input);
+
+		expect(result).toMatchSnapshot();
+	});
+
+	it("parses if statements with multiple else clauses", () => {
+		const input = `
+		@if "hello" {
+		} @else if "hello again" {
+		} @else {
+		}`;
+		const result = parser.parse(input);
+
+		expect(result).toMatchSnapshot();
+	});
 });

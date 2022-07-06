@@ -24,7 +24,7 @@ export class Token {
 	@token(IDENT)
 	static Ident: TokenType;
 
-	@token(re`/(if|else|from|through|to|in)${WB}/`, { longer_alt: Token.Ident })
+	@token(re`/(else|from|through|to|in)${WB}/`, { longer_alt: Token.Ident })
 	static Keyword: TokenType;
 
 	@token(re`/(as)${WB}/`, { longer_alt: Token.Ident })
@@ -94,6 +94,9 @@ export class Token {
 
 	@token(/@else/, { longer_alt: Token.AtWord })
 	static AtElse: TokenType;
+
+	@token(re`/(if)${WB}/`, { longer_alt: Token.Ident })
+	static If: TokenType;
 
 	@token(/@each/, { longer_alt: Token.AtWord })
 	static AtEach: TokenType;
@@ -261,6 +264,7 @@ export const TOKEN_VOCAB = [
 	Token.AtAtRoot,
 	Token.AtIf,
 	Token.AtElse,
+	Token.If,
 	Token.AtEach,
 	Token.AtFor,
 	Token.AtWhile,
