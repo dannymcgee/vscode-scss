@@ -443,9 +443,7 @@ exports[`Parser parses module load statements 1`] = `
           '"' (DQuote (1:(15,16))),
         ),
       ),
-      (Terminator
-        ";" (SemiColon (1:(16,17))),
-      ),
+      ";" (SemiColon (1:(16,17))),
     ),
   ),
 )

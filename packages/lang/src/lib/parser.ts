@@ -27,248 +27,216 @@ class BaseCstParser extends ChevCstParser {
 class CstParser extends BaseCstParser {
 	constructor () {
 		super(TOKEN_VOCAB.slice(), { nodeLocationTracking: "full" });
-		const $ = this;
-
-		$.RULE("SourceFile", () => {
-			$.MANY(() => {
-				$.OR([
-					{ ALT: () => $.SUBRULE($.UniversalStmt) },
-					{ ALT: () => $.SUBRULE($.TopLevelStmt) },
-				]);
-			});
-		});
-
-		$.RULE("UniversalStmt", () => {
-			$.OR([
-				{ ALT: () => $.SUBRULE($.VarDeclStmt) },
-				{ ALT: () => $.SUBRULE($.FlowControlStmt) },
-				{ ALT: () => $.SUBRULE($.SassDirectiveStmt) },
-			]);
-		});
-
-		$.RULE("TopLevelStmt", () => {
-			$.OR([
-				{ ALT: () => $.SUBRULE($.ModuleLoadStmt) },
-				{ ALT: () => $.SUBRULE($.ImportStmt) },
-				{ ALT: () => $.SUBRULE($.MixinDefStmt) },
-				{ ALT: () => $.SUBRULE($.FunctionDefStmt) },
-			]);
-		});
-
-		$.RULE("BlockLevelStmt", () => {
-			$.OR([
-				{ ALT: () => $.SUBRULE($.UniversalStmt) },
-//				{ ALT: () => $.SUBRULE($.CssStmt) },
-				{ ALT: () => $.SUBRULE($.ReturnStmt) },
-			]);
-		});
-
-		$.RULE("VarDeclStmt", () => {
-			$.CONSUME(Token.SassVar);
-			$.CONSUME(Token.Colon);
-			$.SUBRULE($.Expression);
-			$.SUBRULE($.Terminator);
-		});
-
-		$.RULE("FlowControlStmt", () => {
-			$.OR([
-				{ ALT: () => $.SUBRULE($.IfStmt) },
-				{ ALT: () => $.SUBRULE($.EachStmt) },
-//				{ ALT: () => $.SUBRULE($.ForStmt) },
-//				{ ALT: () => $.SUBRULE($.WhileStmt) },
-			]);
-		});
-
-		$.RULE("IfStmt", () => {
-			$.CONSUME(Token.AtIf);
-			$.SUBRULE($.Expression);
-			$.SUBRULE($.Block);
-			$.MANY(() => {
-				$.SUBRULE($.ElseClause);
-			});
-		});
-
-		$.RULE("ElseClause", () => {
-			$.CONSUME(Token.AtElse);
-			$.OPTION(() => {
-				$.CONSUME(Token.If);
-				$.SUBRULE($.Expression);
-			});
-			$.SUBRULE($.Block);
-		});
-
-		$.RULE("EachStmt", () => {
-			$.CONSUME(Token.AtEach);
-			$.AT_LEAST_ONE_SEP({
-				SEP: Token.Comma,
-				DEF: () => {
-					$.CONSUME(Token.SassVar);
-				},
-			});
-			$.CONSUME(Token.In);
-			$.SUBRULE($.Expression);
-			$.SUBRULE($.Block);
-		});
-
-		$.RULE("SassDirectiveStmt", () => {
-			$.OR([
-				{ ALT: () => $.CONSUME(Token.AtError) },
-				{ ALT: () => $.CONSUME(Token.AtWarn) },
-				{ ALT: () => $.CONSUME(Token.AtDebug) },
-			]);
-			$.SUBRULE($.StringExpr);
-			$.SUBRULE($.Terminator);
-		});
-
-		$.RULE("ModuleLoadStmt", () => {
-			$.CONSUME(Token.AtUse);
-			$.SUBRULE($.StringExpr);
-			$.OPTION(() => {
-				$.CONSUME(Token.As);
-				$.OR([
-					{ ALT: () => $.CONSUME(Token.Ident) },
-					{ ALT: () => $.CONSUME(Token.Star) },
-				]);
-			});
-			$.CONSUME(Token.SemiColon);
-		});
-
-		$.RULE("ImportStmt", () => {
-			$.CONSUME(Token.AtImport);
-			$.SUBRULE($.StringExpr);
-			$.SUBRULE($.Terminator);
-		});
-
-		$.RULE("MixinDefStmt", () => {
-			$.CONSUME(Token.AtMixin);
-			$.CONSUME(Token.Ident);
-			$.OPTION(() => {
-				$.SUBRULE($.Parameters);
-			});
-			$.SUBRULE($.Block);
-		});
-
-		$.RULE("FunctionDefStmt", () => {
-			$.CONSUME(Token.AtFunction);
-			$.CONSUME(Token.Ident);
-			$.SUBRULE($.Parameters);
-			$.SUBRULE($.Block);
-		});
-
-		$.RULE("ReturnStmt", () => {
-			$.CONSUME(Token.AtReturn);
-			$.SUBRULE($.Expression);
-			$.SUBRULE($.Terminator);
-		});
-
-		$.RULE("Parameters", () => {
-			$.CONSUME(Token.LParen);
-			$.OPTION(() => {
-				$.SUBRULE($.Parameter);
-				$.MANY(() => {
-					$.CONSUME(Token.Comma);
-					$.SUBRULE1($.Parameter);
-				});
-				$.OPTION1(() => {
-					$.OR([
-						{ ALT: () => $.CONSUME1(Token.Comma) },
-						{ ALT: () => $.CONSUME(Token.Ellipsis) },
-					]);
-				});
-			});
-			$.CONSUME(Token.RParen);
-		});
-
-		$.RULE("Parameter", () => {
-			$.CONSUME(Token.SassVar);
-			$.OPTION(() => {
-				$.CONSUME(Token.Colon);
-				$.SUBRULE($.Expression);
-			});
-		});
-
-		$.RULE("Block", () => {
-			$.CONSUME(Token.LBrace);
-			$.MANY(() => {
-				$.SUBRULE($.BlockLevelStmt);
-			});
-			$.CONSUME(Token.RBrace);
-		});
-
-		$.RULE("Expression", () => {
-			$.OR([
-				{ ALT: () => $.CONSUME(Token.SassVar) },
-				{ ALT: () => $.SUBRULE($.StringExpr) },
-			]);
-		});
-
-		$.RULE("StringExpr", () => {
-			$.OR([{
-				GATE: () => $.LA(1).tokenType === Token.SQuote,
-				ALT: () => $.SUBRULE($.SQuotedStringExpr),
-			}, {
-				GATE: () => $.LA(1).tokenType === Token.DQuote,
-				ALT: () => $.SUBRULE($.DQuotedStringExpr),
-			}]);
-		});
-
-		$.RULE("SQuotedStringExpr", () => {
-			this.quotedStringExpr(Token.SQuote);
-		});
-
-		$.RULE("DQuotedStringExpr", () => {
-			this.quotedStringExpr(Token.DQuote);
-		});
-
-		$.RULE("Terminator", () => {
-			$.OR([{
-				GATE: () => $.LA(1).tokenType === Token.RBrace,
-				ALT: () => $.OPTION(() => $.CONSUME(Token.SemiColon)),
-			}, {
-				ALT: () => $.CONSUME1(Token.SemiColon),
-			}]);
-		});
 
 		this.performSelfAnalysis();
 	}
 
-	declare SourceFile: CstMethod;
+	SourceFile = this.RULE("SourceFile", () => {
+		this.MANY(() => {
+			this.OR([
+				{ ALT: () => this.SUBRULE(this.UniversalStmt) },
+				{ ALT: () => this.SUBRULE(this.TopLevelStmt) },
+			]);
+		});
+	});
 
-	declare UniversalStmt: CstMethod;
-	declare TopLevelStmt: CstMethod;
-	declare BlockLevelStmt: CstMethod;
-	declare VarDeclStmt: CstMethod;
-	declare FlowControlStmt: CstMethod;
-	declare IfStmt: CstMethod;
-	declare ElseClause: CstMethod;
-	declare EachStmt: CstMethod;
-	declare SassDirectiveStmt: CstMethod;
-	declare ModuleLoadStmt: CstMethod;
-	declare ImportStmt: CstMethod;
-	declare MixinDefStmt: CstMethod;
-	declare FunctionDefStmt: CstMethod;
-	declare ReturnStmt: CstMethod;
+	UniversalStmt = this.RULE("UniversalStmt", () => {
+		this.OR([
+			{ ALT: () => this.SUBRULE(this.VarDeclStmt) },
+			{ ALT: () => this.SUBRULE(this.FlowControlStmt) },
+			{ ALT: () => this.SUBRULE(this.SassDirectiveStmt) },
+		]);
+	});
 
-	declare Parameters: CstMethod;
-	declare Parameter: CstMethod;
-	declare Block: CstMethod;
+	TopLevelStmt = this.RULE("TopLevelStmt", () => {
+		this.OR([
+			{ ALT: () => this.SUBRULE(this.ModuleLoadStmt) },
+			{ ALT: () => this.SUBRULE(this.ImportStmt) },
+			{ ALT: () => this.SUBRULE(this.MixinDefStmt) },
+			{ ALT: () => this.SUBRULE(this.FunctionDefStmt) },
+		]);
+	});
 
-	declare Expression: CstMethod;
+	BlockLevelStmt = this.RULE("BlockLevelStmt", () => {
+		this.OR([
+			{ ALT: () => this.SUBRULE(this.UniversalStmt) },
+//			{ ALT: () => this.SUBRULE(this.CssStmt) },
+			{ ALT: () => this.SUBRULE(this.ReturnStmt) },
+		]);
+	});
 
-	declare StringExpr: CstMethod;
-	declare DQuotedStringExpr: CstMethod;
-	declare SQuotedStringExpr: CstMethod;
+	VarDeclStmt = this.RULE("VarDeclStmt", () => {
+		this.CONSUME(Token.SassVar);
+		this.CONSUME(Token.Colon);
+		this.SUBRULE(this.Expression);
+		this.SUBRULE(this.Terminator);
+	});
 
-	declare Terminator: CstMethod;
+	FlowControlStmt = this.RULE("FlowControlStmt", () => {
+		this.OR([
+			{ ALT: () => this.SUBRULE(this.IfStmt) },
+			{ ALT: () => this.SUBRULE(this.EachStmt) },
+//			{ ALT: () => this.SUBRULE(this.ForStmt) },
+//			{ ALT: () => this.SUBRULE(this.WhileStmt) },
+		]);
+	});
+
+	IfStmt = this.RULE("IfStmt", () => {
+		this.CONSUME(Token.AtIf);
+		this.SUBRULE(this.Expression);
+		this.SUBRULE(this.Block);
+		this.MANY(() => {
+			this.SUBRULE(this.ElseClause);
+		});
+	});
+
+	ElseClause = this.RULE("ElseClause", () => {
+		this.CONSUME(Token.AtElse);
+		this.OPTION(() => {
+			this.CONSUME(Token.If);
+			this.SUBRULE(this.Expression);
+		});
+		this.SUBRULE(this.Block);
+	});
+
+	EachStmt = this.RULE("EachStmt", () => {
+		this.CONSUME(Token.AtEach);
+		this.AT_LEAST_ONE_SEP({
+			SEP: Token.Comma,
+			DEF: () => {
+				this.CONSUME(Token.SassVar);
+			},
+		});
+		this.CONSUME(Token.In);
+		this.SUBRULE(this.Expression);
+		this.SUBRULE(this.Block);
+	});
+
+	SassDirectiveStmt = this.RULE("SassDirectiveStmt", () => {
+		this.OR([
+			{ ALT: () => this.CONSUME(Token.AtError) },
+			{ ALT: () => this.CONSUME(Token.AtWarn) },
+			{ ALT: () => this.CONSUME(Token.AtDebug) },
+		]);
+		this.SUBRULE(this.StringExpr);
+		this.SUBRULE(this.Terminator);
+	});
+
+	ModuleLoadStmt = this.RULE("ModuleLoadStmt", () => {
+		this.CONSUME(Token.AtUse);
+		this.SUBRULE(this.StringExpr);
+		this.OPTION(() => {
+			this.CONSUME(Token.As);
+			this.OR([
+				{ ALT: () => this.CONSUME(Token.Ident) },
+				{ ALT: () => this.CONSUME(Token.Star) },
+			]);
+		});
+		this.CONSUME(Token.SemiColon);
+	});
+
+	ImportStmt = this.RULE("ImportStmt", () => {
+		this.CONSUME(Token.AtImport);
+		this.SUBRULE(this.StringExpr);
+		this.SUBRULE(this.Terminator);
+	});
+
+	MixinDefStmt = this.RULE("MixinDefStmt", () => {
+		this.CONSUME(Token.AtMixin);
+		this.CONSUME(Token.Ident);
+		this.OPTION(() => {
+			this.SUBRULE(this.Parameters);
+		});
+		this.SUBRULE(this.Block);
+	});
+
+	FunctionDefStmt = this.RULE("FunctionDefStmt", () => {
+		this.CONSUME(Token.AtFunction);
+		this.CONSUME(Token.Ident);
+		this.SUBRULE(this.Parameters);
+		this.SUBRULE(this.Block);
+	});
+
+	ReturnStmt = this.RULE("ReturnStmt", () => {
+		this.CONSUME(Token.AtReturn);
+		this.SUBRULE(this.Expression);
+		this.SUBRULE(this.Terminator);
+	});
+
+	Parameters = this.RULE("Parameters", () => {
+		this.CONSUME(Token.LParen);
+		this.OPTION(() => {
+			this.SUBRULE(this.Parameter);
+			this.MANY(() => {
+				this.CONSUME(Token.Comma);
+				this.SUBRULE1(this.Parameter);
+			});
+			this.OPTION1(() => {
+				this.OR([
+					{ ALT: () => this.CONSUME1(Token.Comma) },
+					{ ALT: () => this.CONSUME(Token.Ellipsis) },
+				]);
+			});
+		});
+		this.CONSUME(Token.RParen);
+	});
+
+	Parameter = this.RULE("Parameter", () => {
+		this.CONSUME(Token.SassVar);
+		this.OPTION(() => {
+			this.CONSUME(Token.Colon);
+			this.SUBRULE(this.Expression);
+		});
+	});
+
+	Block = this.RULE("Block", () => {
+		this.CONSUME(Token.LBrace);
+		this.MANY(() => {
+			this.SUBRULE(this.BlockLevelStmt);
+		});
+		this.CONSUME(Token.RBrace);
+	});
+
+	Expression = this.RULE("Expression", () => {
+		this.OR([
+			{ ALT: () => this.CONSUME(Token.SassVar) },
+			{ ALT: () => this.SUBRULE(this.StringExpr) },
+		]);
+	});
+
+	StringExpr = this.RULE("StringExpr", () => {
+		this.OR([{
+			GATE: () => this.LA(1).tokenType === Token.SQuote,
+			ALT: () => this.SUBRULE(this.SQuotedStringExpr),
+		}, {
+			GATE: () => this.LA(1).tokenType === Token.DQuote,
+			ALT: () => this.SUBRULE(this.DQuotedStringExpr),
+		}]);
+	});
+
+	SQuotedStringExpr = this.RULE("SQuotedStringExpr", () => {
+		this.quotedStringExpr(Token.SQuote);
+	});
+
+	DQuotedStringExpr = this.RULE("DQuotedStringExpr", () => {
+		this.quotedStringExpr(Token.DQuote);
+	});
+
+	Terminator = this.RULE("Terminator", () => {
+		this.OR([{
+			GATE: () => this.LA(1).tokenType === Token.RBrace,
+			ALT: () => this.OPTION(() => this.CONSUME(Token.SemiColon)),
+		}, {
+			ALT: () => this.CONSUME1(Token.SemiColon),
+		}]);
+	});
 
 	private quotedStringExpr(quote: TokenType) {
-		const $ = this;
-
-		$.CONSUME(quote);
-		$.MANY(() => {
-			$.NOT(quote);
+		this.CONSUME(quote);
+		this.MANY(() => {
+			this.NOT(quote);
 		});
-		$.CONSUME1(quote);
+		this.CONSUME1(quote);
 	}
 }
 
