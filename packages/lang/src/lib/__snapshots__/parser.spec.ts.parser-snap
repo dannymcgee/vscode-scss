@@ -959,7 +959,49 @@ exports[`Parser parses style rules 1`] = `
         ),
         (Block
           "{" (LBrace (2:(7,8))),
-          "}" (RBrace (3:(2,3))),
+          (BlockLevelStmt
+            (PropertyDecl
+              "display" (Ident (3:(3,10))),
+              ":" (Colon (3:(10,11))),
+              "flex" (Ident (3:(12,16))),
+              (Terminator
+                ";" (SemiColon (3:(16,17))),
+              ),
+            ),
+          ),
+          (BlockLevelStmt
+            (PropertyDecl
+              "width" (Ident (4:(3,8))),
+              ":" (Colon (4:(8,9))),
+              (Expression
+                (Literal
+                  "100%" (NumLiteral (4:(10,14))),
+                ),
+              ),
+              (Terminator
+                ";" (SemiColon (4:(14,15))),
+              ),
+            ),
+          ),
+          (BlockLevelStmt
+            (PropertyDecl
+              "align-items" (Ident (5:(3,14))),
+              ":" (Colon (5:(14,15))),
+              "center" (Ident (5:(16,22))),
+              (Terminator
+                ";" (SemiColon (5:(22,23))),
+              ),
+            ),
+          ),
+          (BlockLevelStmt
+            (PropertyDecl
+              "justify-content" (Ident (6:(3,18))),
+              ":" (Colon (6:(18,19))),
+              "center" (Ident (6:(20,26))),
+              (Terminator),
+            ),
+          ),
+          "}" (RBrace (7:(2,3))),
         ),
       ),
     ),

@@ -1,3 +1,19 @@
+#
+# Notation here is pretty standard, with a couple oddities to note:
+#
+# (?=> Pattern1 ) Pattern2
+#     `Pattern1` serves as a lookahead condition for matching `Pattern2`. I.e.,
+#     if `Pattern1` is not found at LA(n), where n is the number of question
+#     marks, The rule is not a match.
+#
+# ( Pattern )<Token>+
+# ( Pattern )<Token>*
+#     Repetition of `Pattern`, with `Token` as a non-trailing separator.
+#
+# The purpose of this notation is to be a 1:1 semantic match for Chevrotain's
+# "internal DSL", but in a format that's more readable.
+#
+
 SourceFile
 	= ( UniversalStmt | TopLevelStmt )*
 	;
@@ -17,7 +33,8 @@ TopLevelStmt
 	;
 
 BlockLevelStmt
-	= UniversalStmt
+	= (????=> Token.SemiColon | Token.RBrace ) PropertyDecl
+	| UniversalStmt
 	| ReturnStmt
 	;
 
@@ -42,7 +59,7 @@ ElseClause
 
 EachStmt
 	= Token.AtEach
-		( Token.SassVar )[Token.Comma]+
+		( Token.SassVar )<Token.Comma>+
 		Token.In
 		Expression
 		Block
@@ -80,7 +97,7 @@ StyleRuleStmt
 	;
 
 SelectorList
-	= (( Selector | Combinator | Token.Ampersand )+ )[Token.Comma]+
+	= (( Selector | Combinator | Token.Ampersand )+ )<Token.Comma>+
 	;
 
 Selector
@@ -116,6 +133,13 @@ AttributeSelector
 
 SelectorArguments
 	= Token.LParen ( Expression | SelectorList ) Token.RParen
+	;
+
+PropertyDecl
+	= ( Token.Ident | Token.CustomProperty )
+		Token.Colon
+		( Block
+		| ( Expression | Token.Ident ) Terminator )
 	;
 
 ModuleLoadStmt

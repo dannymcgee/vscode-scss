@@ -230,6 +230,10 @@ describe("Parser", () => {
 	it("parses style rules", () => {
 		const input = `
 		.foo {
+			display: flex;
+			width: 100%;
+			align-items: center;
+			justify-content: center
 		}`;
 		const result = parser.parse(input);
 

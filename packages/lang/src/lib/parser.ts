@@ -58,8 +58,32 @@ class CstParser extends BaseCstParser {
 		]);
 	});
 
+	/**
+	 * FIXME:
+	 *
+	 * 4 tokens is a lot of lookahead, and this still isn't enough to fully
+	 * disambiguate. E.g., these statements would need LA(6):
+	 *
+	 * ```scss
+	 * .foo {
+	 *   // Nested selector:
+	 *   div:hover div div div {}
+	 *   // Property declaration:
+	 *   background: transparent center center no-repeat
+	 * }
+	 * ```
+	 * And that's probably not the only example. Is this why the reference
+	 * implementation parses the source text directly instead of scanning tokens?
+	 */
 	BlockLevelStmt = this.RULE("BlockLevelStmt", () => {
 		this.OR([
+			{
+				GATE: () => (
+					this.LA(4).tokenType === Token.SemiColon
+					|| this.LA(4).tokenType === Token.RBrace
+				),
+				ALT: () => this.SUBRULE(this.PropertyDecl)
+			},
 			{ ALT: () => this.SUBRULE(this.UniversalStmt) },
 			{ ALT: () => this.SUBRULE(this.ReturnStmt) },
 		]);
@@ -235,6 +259,24 @@ class CstParser extends BaseCstParser {
 		this.CONSUME(Token.RParen);
 	});
 
+	PropertyDecl = this.RULE("PropertyDecl", () => {
+		this.OR([
+			{ ALT: () => this.CONSUME(Token.Ident) },
+			{ ALT: () => this.CONSUME(Token.CustomProperty) },
+		]);
+		this.CONSUME(Token.Colon);
+		this.OR1([
+			{ ALT: () => this.SUBRULE(this.Block) },
+			{ ALT: () => {
+				this.OR2([
+					{ ALT: () => this.SUBRULE(this.Expression) },
+					{ ALT: () => this.CONSUME1(Token.Ident) },
+				]);
+				this.SUBRULE(this.Terminator);
+			}},
+		]);
+	});
+
 	ModuleLoadStmt = this.RULE("ModuleLoadStmt", () => {
 		this.CONSUME(Token.AtUse);
 		this.SUBRULE(this.StringLiteral);
@@ -314,6 +356,7 @@ class CstParser extends BaseCstParser {
 		this.OR([
 			{ ALT: () => this.CONSUME(Token.SassVar) },
 			{ ALT: () => this.SUBRULE(this.Literal) },
+			// { ALT: () => this.CONSUME(Token.Ident) },
 		]);
 	});
 
