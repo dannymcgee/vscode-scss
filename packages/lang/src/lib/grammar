@@ -130,11 +130,11 @@ ImportStmt
 	;
 
 MixinDefStmt
-	= Token.AtMixin Token.Ident ( Parameters )? RuleBlock
+	= Token.AtMixin Token.Ident ( Parameters )? Block
 	;
 
 FunctionDefStmt
-	= Token.AtFunction Token.Ident Parameters FunctionBody
+	= Token.AtFunction Token.Ident Parameters Block
 	;
 
 ReturnStmt
