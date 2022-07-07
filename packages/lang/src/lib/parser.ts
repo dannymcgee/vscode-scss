@@ -76,7 +76,7 @@ class CstParser extends BaseCstParser {
 		this.OR([
 			{ ALT: () => this.SUBRULE(this.IfStmt) },
 			{ ALT: () => this.SUBRULE(this.EachStmt) },
-//			{ ALT: () => this.SUBRULE(this.ForStmt) },
+			{ ALT: () => this.SUBRULE(this.ForStmt) },
 //			{ ALT: () => this.SUBRULE(this.WhileStmt) },
 		]);
 	});
@@ -112,19 +112,32 @@ class CstParser extends BaseCstParser {
 		this.SUBRULE(this.Block);
 	});
 
+	ForStmt = this.RULE("ForStmt", () => {
+		this.CONSUME(Token.AtFor);
+		this.CONSUME(Token.SassVar);
+		this.CONSUME(Token.From);
+		this.SUBRULE(this.Expression);
+		this.OR([
+			{ ALT: () => this.CONSUME(Token.Through) },
+			{ ALT: () => this.CONSUME(Token.To) },
+		]),
+		this.SUBRULE1(this.Expression);
+		this.SUBRULE(this.Block);
+	});
+
 	SassDirectiveStmt = this.RULE("SassDirectiveStmt", () => {
 		this.OR([
 			{ ALT: () => this.CONSUME(Token.AtError) },
 			{ ALT: () => this.CONSUME(Token.AtWarn) },
 			{ ALT: () => this.CONSUME(Token.AtDebug) },
 		]);
-		this.SUBRULE(this.StringExpr);
+		this.SUBRULE(this.StringLiteral);
 		this.SUBRULE(this.Terminator);
 	});
 
 	ModuleLoadStmt = this.RULE("ModuleLoadStmt", () => {
 		this.CONSUME(Token.AtUse);
-		this.SUBRULE(this.StringExpr);
+		this.SUBRULE(this.StringLiteral);
 		this.OPTION(() => {
 			this.CONSUME(Token.As);
 			this.OR([
@@ -137,7 +150,7 @@ class CstParser extends BaseCstParser {
 
 	ImportStmt = this.RULE("ImportStmt", () => {
 		this.CONSUME(Token.AtImport);
-		this.SUBRULE(this.StringExpr);
+		this.SUBRULE(this.StringLiteral);
 		this.SUBRULE(this.Terminator);
 	});
 
@@ -200,22 +213,32 @@ class CstParser extends BaseCstParser {
 	Expression = this.RULE("Expression", () => {
 		this.OR([
 			{ ALT: () => this.CONSUME(Token.SassVar) },
-			{ ALT: () => this.SUBRULE(this.StringExpr) },
+			{ ALT: () => this.SUBRULE(this.Literal) },
 		]);
 	});
 
-	StringExpr = this.RULE("StringExpr", () => {
+	Literal = this.RULE("Literal", () => {
 		this.OR([
-			{ ALT: () => this.SUBRULE(this.SQuotedStringExpr) },
-			{ ALT: () => this.SUBRULE(this.DQuotedStringExpr) },
+			{ ALT: () => this.SUBRULE(this.StringLiteral) },
+			{ ALT: () => this.CONSUME(Token.BoolLiteral) },
+			{ ALT: () => this.CONSUME(Token.NullLiteral) },
+			{ ALT: () => this.CONSUME(Token.NumLiteral) },
+			{ ALT: () => this.CONSUME(Token.ColorLiteral) },
+		])
+	});
+
+	StringLiteral = this.RULE("StringLiteral", () => {
+		this.OR([
+			{ ALT: () => this.SUBRULE(this.SQuotedStringLiteral) },
+			{ ALT: () => this.SUBRULE(this.DQuotedStringLiteral) },
 		]);
 	});
 
-	SQuotedStringExpr = this.RULE("SQuotedStringExpr", () => {
+	SQuotedStringLiteral = this.RULE("SQuotedStringLiteral", () => {
 		this.quotedStringExpr(Token.SQuote);
 	});
 
-	DQuotedStringExpr = this.RULE("DQuotedStringExpr", () => {
+	DQuotedStringLiteral = this.RULE("DQuotedStringLiteral", () => {
 		this.quotedStringExpr(Token.DQuote);
 	});
 

@@ -140,6 +140,18 @@ describe("Parser", () => {
 		expect(result).toMatchSnapshot();
 	});
 
+	it("parses @for statements", () => {
+		const through = `@for $i from 1 through 10 {}`;
+		let result = parser.parse(through);
+
+		expect(result).toMatchSnapshot("with 'through' keyword");
+
+		const to = `@for $i from 1 to 10 {}`;
+		result = parser.parse(to);
+
+		expect(result).toMatchSnapshot("with 'to' keyword");
+	});
+
 	it("parses blocks with optional final semicolon", () => {
 		const withSemi = `
 		{

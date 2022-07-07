@@ -28,7 +28,7 @@ VarDeclStmt
 FlowControlStmt
 	= IfStmt
 	| EachStmt
-#	| ForStmt
+	| ForStmt
 #	| WhileStmt
 	;
 
@@ -48,6 +48,16 @@ EachStmt
 		Block
 	;
 
+ForStmt
+	= Token.AtFor
+		Token.SassVar
+		Token.From
+		Expression
+		( Token.Through | Token.To )
+		Expression
+		Block
+	;
+
 SassDirectiveStmt
 	= ( Token.AtError | Token.AtWarn | Token.AtDebug )
 		QuotedStringExpr
@@ -62,7 +72,7 @@ ModuleLoadStmt
 	;
 
 ImportStmt
-	= Token.AtImport StringExpr Terminator
+	= Token.AtImport StringLiteral Terminator
 	;
 
 MixinDefStmt
@@ -96,18 +106,26 @@ Block
 
 Expression
 	= Token.SassVar
-	| StringExpr
+	| Literal
 	;
 
-StringExpr
-	= SQuotedStringExpr | DQuotedStringExpr
+Literal
+	= StringLiteral
+	| Token.BoolLiteral
+	| Token.NullLiteral
+	| Token.NumLiteral
+	| Token.ColorLiteral
 	;
 
-SQuotedStringExpr
+StringLiteral
+	= SQuotedStringLiteral | DQuotedStringLiteral
+	;
+
+SQuotedStringLiteral
 	= Token.SQuote ( ~Token.SQuote )* Token.SQuote
 	;
 
-DQuotedStringExpr
+DQuotedStringLiteral
 	= Token.DQuote ( ~Token.DQuote )* Token.DQuote
 	;
 

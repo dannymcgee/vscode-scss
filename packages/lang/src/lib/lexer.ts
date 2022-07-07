@@ -24,9 +24,6 @@ export class Token {
 	@token(IDENT)
 	static Ident: TokenType;
 
-	@token(re`/(else|from|through|to)${WB}/`, { longer_alt: Token.Ident })
-	static Keyword: TokenType;
-
 	@token(re`/(as)${WB}/`, { longer_alt: Token.Ident })
 	static As: TokenType;
 
@@ -35,6 +32,15 @@ export class Token {
 
 	@token(re`/(or)${WB}/`, { longer_alt: Token.Ident })
 	static Or: TokenType;
+
+	@token(re`/(from)${WB}/`, { longer_alt: Token.Ident })
+	static From: TokenType;
+
+	@token(re`/(through)${WB}/`, { longer_alt: Token.Ident })
+	static Through: TokenType;
+
+	@token(re`/(to)${WB}/`, { longer_alt: Token.Ident })
+	static To: TokenType;
 
 	@token(re`/(true|false)${WB}/`, { longer_alt: Token.Ident })
 	static BoolLiteral: TokenType;
@@ -246,7 +252,6 @@ export const TOKEN_VOCAB = [
 	Token.ColorLiteral,
 	Token.NumLiteral,
 	// Ident and family
-	Token.Keyword,
 	Token.As,
 	Token.And,
 	Token.Or,
@@ -271,6 +276,9 @@ export const TOKEN_VOCAB = [
 	Token.AtEach,
 	Token.In,
 	Token.AtFor,
+	Token.From,
+	Token.Through,
+	Token.To,
 	Token.AtWhile,
 	Token.AtWord,
 	// Any other identifier
