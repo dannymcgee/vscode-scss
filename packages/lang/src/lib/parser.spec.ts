@@ -178,4 +178,61 @@ describe("Parser", () => {
 		result = parser.parse(withoutSemi, "Block");
 		expect(result).toMatchSnapshot("WITHOUT semicolon");
 	});
+
+	it("parses simple selectors", () => {
+		const selectors = {
+			"* selector": `*`,
+			"tag selector": `div`,
+			"pseudo-element selector": `::after`,
+			"pseudo-class selector": `:hover`,
+			"pseudo-class selector with arguments": `:nth-child(2)`,
+			"class selector": `.foo`,
+			"ID selector": `#foo`,
+			"attribute selector": `[data-foo]`,
+			"attribute selector with value": `[class^="col-"]`,
+		};
+
+		for (const [name, input] of Object.entries(selectors)) {
+			const result = parser.parse(input, "Selector");
+			expect(result).toMatchSnapshot(name);
+		}
+	});
+
+	it("parses compound selectors", () => {
+		const inputs = [
+			`div.foo`,
+			`.foo.bar.baz`,
+			`#foo.bar`,
+			`.foo#bar::after:hover`,
+		];
+
+		for (const input of inputs) {
+			const result = parser.parse(input, "SelectorList");
+			expect(result).toMatchSnapshot();
+		}
+	});
+
+	it("parses selector lists", () => {
+		const inputs = [
+			`*::before, *::after`,
+			`h1, h2, h3, h4, h5`,
+			`label > input[type="checkbox"], label > input[type="radio"]`,
+			`&:hover, &:focus, &:active`,
+			`&:not(:last-child)`,
+		];
+
+		for (const input of inputs) {
+			const result = parser.parse(input, "SelectorList");
+			expect(result).toMatchSnapshot();
+		}
+	});
+
+	it("parses style rules", () => {
+		const input = `
+		.foo {
+		}`;
+		const result = parser.parse(input);
+
+		expect(result).toMatchSnapshot();
+	});
 });

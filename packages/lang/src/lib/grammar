@@ -6,6 +6,7 @@ UniversalStmt
 	= VarDeclStmt
 	| FlowControlStmt
 	| SassDirectiveStmt
+	| CssStmt
 	;
 
 TopLevelStmt
@@ -17,7 +18,6 @@ TopLevelStmt
 
 BlockLevelStmt
 	= UniversalStmt
-#	| CssStmt
 	| ReturnStmt
 	;
 
@@ -66,6 +66,56 @@ SassDirectiveStmt
 	= ( Token.AtError | Token.AtWarn | Token.AtDebug )
 		QuotedStringExpr
 		Terminator
+	;
+
+CssStmt
+	= StyleRuleStmt
+#	| CssAtRuleStmt
+#	| IncludeStmt
+#	| AtRootStmt
+	;
+
+StyleRuleStmt
+	= SelectorList Block
+	;
+
+SelectorList
+	= (( Selector | Combinator | Token.Ampersand )+ )[Token.Comma]+
+	;
+
+Selector
+	= Token.Star
+	| Token.Ident
+	| ( Token.ColonColon Token.Ident ( SelectorArguments )? )
+	| ( Token.Colon Token.Ident ( SelectorArguments )? )
+	| ( Token.Dot Token.Ident )
+	| ( Token.Hash Token.Ident )
+	| AttributeSelector
+	;
+
+Combinator
+	= Token.Greater
+	| Token.Plus
+	| Token.Tilde
+	| Token.BarBar
+	;
+
+AttributeSelector
+	= Token.LBracket
+		Token.Ident
+		(( Token.StarEqual
+			| Token.CaretEqual
+			| Token.BarEqual
+			| Token.TildeEqual
+			| Token.DollarEqual
+			| Token.Equal )
+			Expression
+		)?
+		Token.RBracket
+	;
+
+SelectorArguments
+	= Token.LParen ( Expression | SelectorList ) Token.RParen
 	;
 
 ModuleLoadStmt

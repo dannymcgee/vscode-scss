@@ -431,6 +431,69 @@ exports[`Parser parses blocks with optional final semicolon: WITHOUT semicolon 1
 )
 `;
 
+exports[`Parser parses compound selectors 1`] = `
+(SelectorList
+  (Selector
+    "div" (Ident (1:(0,3))),
+  ),
+  (Selector
+    "." (Dot (1:(3,4))),
+    "foo" (Ident (1:(4,7))),
+  ),
+)
+`;
+
+exports[`Parser parses compound selectors 2`] = `
+(SelectorList
+  (Selector
+    "." (Dot (1:(0,1))),
+    "foo" (Ident (1:(1,4))),
+  ),
+  (Selector
+    "." (Dot (1:(4,5))),
+    "bar" (Ident (1:(5,8))),
+  ),
+  (Selector
+    "." (Dot (1:(8,9))),
+    "baz" (Ident (1:(9,12))),
+  ),
+)
+`;
+
+exports[`Parser parses compound selectors 3`] = `
+(SelectorList
+  (Selector
+    "#" (Hash (1:(0,1))),
+    "foo" (Ident (1:(1,4))),
+  ),
+  (Selector
+    "." (Dot (1:(4,5))),
+    "bar" (Ident (1:(5,8))),
+  ),
+)
+`;
+
+exports[`Parser parses compound selectors 4`] = `
+(SelectorList
+  (Selector
+    "." (Dot (1:(0,1))),
+    "foo" (Ident (1:(1,4))),
+  ),
+  (Selector
+    "#" (Hash (1:(4,5))),
+    "bar" (Ident (1:(5,8))),
+  ),
+  (Selector
+    "::" (ColonColon (1:(8,10))),
+    "after" (Ident (1:(10,15))),
+  ),
+  (Selector
+    ":" (Colon (1:(15,16))),
+    "hover" (Ident (1:(16,21))),
+  ),
+)
+`;
+
 exports[`Parser parses function definitions 1`] = `
 (SourceFile
   (TopLevelStmt
@@ -632,6 +695,154 @@ exports[`Parser parses parameters with default values 1`] = `
 )
 `;
 
+exports[`Parser parses selector lists 1`] = `
+(SelectorList
+  (Selector
+    "*" (Star (1:(0,1))),
+  ),
+  (Selector
+    "::" (ColonColon (1:(1,3))),
+    "before" (Ident (1:(3,9))),
+  ),
+  "," (Comma (1:(9,10))),
+  (Selector
+    "*" (Star (1:(11,12))),
+  ),
+  (Selector
+    "::" (ColonColon (1:(12,14))),
+    "after" (Ident (1:(14,19))),
+  ),
+)
+`;
+
+exports[`Parser parses selector lists 2`] = `
+(SelectorList
+  (Selector
+    "h1" (Ident (1:(0,2))),
+  ),
+  "," (Comma (1:(2,3))),
+  (Selector
+    "h2" (Ident (1:(4,6))),
+  ),
+  "," (Comma (1:(6,7))),
+  (Selector
+    "h3" (Ident (1:(8,10))),
+  ),
+  "," (Comma (1:(10,11))),
+  (Selector
+    "h4" (Ident (1:(12,14))),
+  ),
+  "," (Comma (1:(14,15))),
+  (Selector
+    "h5" (Ident (1:(16,18))),
+  ),
+)
+`;
+
+exports[`Parser parses selector lists 3`] = `
+(SelectorList
+  (Selector
+    "label" (Ident (1:(0,5))),
+  ),
+  (Combinator
+    ">" (Greater (1:(6,7))),
+  ),
+  (Selector
+    "input" (Ident (1:(8,13))),
+  ),
+  (Selector
+    (AttributeSelector
+      "[" (LBracket (1:(13,14))),
+      "type" (Ident (1:(14,18))),
+      "=" (Equal (1:(18,19))),
+      (Expression
+        (Literal
+          (StringLiteral
+            (DQuotedStringLiteral
+              '"' (DQuote (1:(19,20))),
+              "checkbox" (Ident (1:(20,28))),
+              '"' (DQuote (1:(28,29))),
+            ),
+          ),
+        ),
+      ),
+      "]" (RBracket (1:(29,30))),
+    ),
+  ),
+  "," (Comma (1:(30,31))),
+  (Selector
+    "label" (Ident (1:(32,37))),
+  ),
+  (Combinator
+    ">" (Greater (1:(38,39))),
+  ),
+  (Selector
+    "input" (Ident (1:(40,45))),
+  ),
+  (Selector
+    (AttributeSelector
+      "[" (LBracket (1:(45,46))),
+      "type" (Ident (1:(46,50))),
+      "=" (Equal (1:(50,51))),
+      (Expression
+        (Literal
+          (StringLiteral
+            (DQuotedStringLiteral
+              '"' (DQuote (1:(51,52))),
+              "radio" (Ident (1:(52,57))),
+              '"' (DQuote (1:(57,58))),
+            ),
+          ),
+        ),
+      ),
+      "]" (RBracket (1:(58,59))),
+    ),
+  ),
+)
+`;
+
+exports[`Parser parses selector lists 4`] = `
+(SelectorList
+  "&" (Ampersand (1:(0,1))),
+  (Selector
+    ":" (Colon (1:(1,2))),
+    "hover" (Ident (1:(2,7))),
+  ),
+  "," (Comma (1:(7,8))),
+  "&" (Ampersand (1:(9,10))),
+  (Selector
+    ":" (Colon (1:(10,11))),
+    "focus" (Ident (1:(11,16))),
+  ),
+  "," (Comma (1:(16,17))),
+  "&" (Ampersand (1:(18,19))),
+  (Selector
+    ":" (Colon (1:(19,20))),
+    "active" (Ident (1:(20,26))),
+  ),
+)
+`;
+
+exports[`Parser parses selector lists 5`] = `
+(SelectorList
+  "&" (Ampersand (1:(0,1))),
+  (Selector
+    ":" (Colon (1:(1,2))),
+    "not" (Ident (1:(2,5))),
+    (SelectorArguments
+      "(" (LParen (1:(5,6))),
+      (SelectorList
+        (Selector
+          ":" (Colon (1:(6,7))),
+          "last-child" (Ident (1:(7,17))),
+        ),
+      ),
+      ")" (RParen (1:(17,18))),
+    ),
+  ),
+)
+`;
+
 exports[`Parser parses simple mixin definitions 1`] = `
 (SourceFile
   (TopLevelStmt
@@ -641,6 +852,115 @@ exports[`Parser parses simple mixin definitions 1`] = `
       (Block
         "{" (LBrace (1:(11,12))),
         "}" (RBrace (1:(12,13))),
+      ),
+    ),
+  ),
+)
+`;
+
+exports[`Parser parses simple selectors: * selector 1`] = `
+(Selector
+  "*" (Star (1:(0,1))),
+)
+`;
+
+exports[`Parser parses simple selectors: ID selector 1`] = `
+(Selector
+  "#" (Hash (1:(0,1))),
+  "foo" (Ident (1:(1,4))),
+)
+`;
+
+exports[`Parser parses simple selectors: attribute selector 1`] = `
+(Selector
+  (AttributeSelector
+    "[" (LBracket (1:(0,1))),
+    "data-foo" (Ident (1:(1,9))),
+    "]" (RBracket (1:(9,10))),
+  ),
+)
+`;
+
+exports[`Parser parses simple selectors: attribute selector with value 1`] = `
+(Selector
+  (AttributeSelector
+    "[" (LBracket (1:(0,1))),
+    "class" (Ident (1:(1,6))),
+    "^=" (CaretEqual (1:(6,8))),
+    (Expression
+      (Literal
+        (StringLiteral
+          (DQuotedStringLiteral
+            '"' (DQuote (1:(8,9))),
+            "col-" (Ident (1:(9,13))),
+            '"' (DQuote (1:(13,14))),
+          ),
+        ),
+      ),
+    ),
+    "]" (RBracket (1:(14,15))),
+  ),
+)
+`;
+
+exports[`Parser parses simple selectors: class selector 1`] = `
+(Selector
+  "." (Dot (1:(0,1))),
+  "foo" (Ident (1:(1,4))),
+)
+`;
+
+exports[`Parser parses simple selectors: pseudo-class selector 1`] = `
+(Selector
+  ":" (Colon (1:(0,1))),
+  "hover" (Ident (1:(1,6))),
+)
+`;
+
+exports[`Parser parses simple selectors: pseudo-class selector with arguments 1`] = `
+(Selector
+  ":" (Colon (1:(0,1))),
+  "nth-child" (Ident (1:(1,10))),
+  (SelectorArguments
+    "(" (LParen (1:(10,11))),
+    (Expression
+      (Literal
+        "2" (NumLiteral (1:(11,12))),
+      ),
+    ),
+    ")" (RParen (1:(12,13))),
+  ),
+)
+`;
+
+exports[`Parser parses simple selectors: pseudo-element selector 1`] = `
+(Selector
+  "::" (ColonColon (1:(0,2))),
+  "after" (Ident (1:(2,7))),
+)
+`;
+
+exports[`Parser parses simple selectors: tag selector 1`] = `
+(Selector
+  "div" (Ident (1:(0,3))),
+)
+`;
+
+exports[`Parser parses style rules 1`] = `
+(SourceFile
+  (UniversalStmt
+    (CssStmt
+      (StyleRuleStmt
+        (SelectorList
+          (Selector
+            "." (Dot (2:(2,3))),
+            "foo" (Ident (2:(3,6))),
+          ),
+        ),
+        (Block
+          "{" (LBrace (2:(7,8))),
+          "}" (RBrace (3:(2,3))),
+        ),
       ),
     ),
   ),

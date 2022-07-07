@@ -45,6 +45,7 @@ class CstParser extends BaseCstParser {
 			{ ALT: () => this.SUBRULE(this.VarDeclStmt) },
 			{ ALT: () => this.SUBRULE(this.FlowControlStmt) },
 			{ ALT: () => this.SUBRULE(this.SassDirectiveStmt) },
+			{ ALT: () => this.SUBRULE(this.CssStmt) },
 		]);
 	});
 
@@ -60,7 +61,6 @@ class CstParser extends BaseCstParser {
 	BlockLevelStmt = this.RULE("BlockLevelStmt", () => {
 		this.OR([
 			{ ALT: () => this.SUBRULE(this.UniversalStmt) },
-//			{ ALT: () => this.SUBRULE(this.CssStmt) },
 			{ ALT: () => this.SUBRULE(this.ReturnStmt) },
 		]);
 	});
@@ -139,6 +139,100 @@ class CstParser extends BaseCstParser {
 		]);
 		this.SUBRULE(this.StringLiteral);
 		this.SUBRULE(this.Terminator);
+	});
+
+	CssStmt = this.RULE("CssStmt", () => {
+		this.OR([
+			{ ALT: () => this.SUBRULE(this.StyleRuleStmt) },
+//			{ ALT: () => this.SUBRULE(this.CssAtRuleStmt) },
+//			{ ALT: () => this.SUBRULE(this.IncludeStmt) },
+//			{ ALT: () => this.SUBRULE(this.AtRootStmt) },
+		])
+	});
+
+	StyleRuleStmt = this.RULE("StyleRuleStmt", () => {
+		this.SUBRULE(this.SelectorList);
+		this.SUBRULE(this.Block);
+	});
+
+	SelectorList = this.RULE("SelectorList", () => {
+		this.AT_LEAST_ONE_SEP({
+			SEP: Token.Comma,
+			DEF: () => {
+				this.AT_LEAST_ONE(() => {
+					this.OR([
+						{ ALT: () => this.SUBRULE(this.Selector) },
+						{ ALT: () => this.SUBRULE(this.Combinator) },
+						{ ALT: () => this.CONSUME(Token.Ampersand) },
+					]);
+				});
+			},
+		});
+	});
+
+	Selector = this.RULE("Selector", () => {
+		this.OR([
+			{ ALT: () => this.CONSUME(Token.Star) },
+			{ ALT: () => this.CONSUME(Token.Ident) },
+			{ ALT: () => {
+				this.CONSUME(Token.ColonColon);
+				this.CONSUME1(Token.Ident);
+				this.OPTION(() => {
+					this.SUBRULE(this.SelectorArguments);
+				});
+			}},
+			{ ALT: () => {
+				this.CONSUME(Token.Colon);
+				this.CONSUME2(Token.Ident);
+				this.OPTION1(() => {
+					this.SUBRULE1(this.SelectorArguments);
+				});
+			}},
+			{ ALT: () => {
+				this.CONSUME(Token.Dot);
+				this.CONSUME3(Token.Ident);
+			}},
+			{ ALT: () => {
+				this.CONSUME(Token.Hash);
+				this.CONSUME4(Token.Ident);
+			}},
+			{ ALT: () => this.SUBRULE(this.AttributeSelector) },
+		]);
+	});
+
+	Combinator = this.RULE("Combinator", () => {
+		this.OR([
+			{ ALT: () => this.CONSUME(Token.Greater) },
+			{ ALT: () => this.CONSUME(Token.Plus) },
+			{ ALT: () => this.CONSUME(Token.Tilde) },
+			{ ALT: () => this.CONSUME(Token.BarBar) },
+		]);
+	});
+
+	AttributeSelector = this.RULE("AttributeSelector", () => {
+		this.CONSUME(Token.LBracket);
+		this.CONSUME(Token.Ident);
+		this.OPTION(() => {
+			this.OR([
+				{ ALT: () => this.CONSUME(Token.StarEqual) },
+				{ ALT: () => this.CONSUME(Token.CaretEqual) },
+				{ ALT: () => this.CONSUME(Token.BarEqual) },
+				{ ALT: () => this.CONSUME(Token.TildeEqual) },
+				{ ALT: () => this.CONSUME(Token.DollarEqual) },
+				{ ALT: () => this.CONSUME(Token.Equal) },
+			]);
+			this.SUBRULE(this.Expression);
+		});
+		this.CONSUME(Token.RBracket);
+	});
+
+	SelectorArguments = this.RULE("SelectorArguments", () => {
+		this.CONSUME(Token.LParen);
+		this.OR([
+			{ ALT: () => this.SUBRULE(this.Expression) },
+			{ ALT: () => this.SUBRULE(this.SelectorList) },
+		]);
+		this.CONSUME(Token.RParen);
 	});
 
 	ModuleLoadStmt = this.RULE("ModuleLoadStmt", () => {
