@@ -29,7 +29,7 @@ FlowControlStmt
 	= IfStmt
 	| EachStmt
 	| ForStmt
-#	| WhileStmt
+	| WhileStmt
 	;
 
 IfStmt
@@ -56,6 +56,10 @@ ForStmt
 		( Token.Through | Token.To )
 		Expression
 		Block
+	;
+
+WhileStmt
+	= Token.AtWhile Expression Block
 	;
 
 SassDirectiveStmt

@@ -77,7 +77,7 @@ class CstParser extends BaseCstParser {
 			{ ALT: () => this.SUBRULE(this.IfStmt) },
 			{ ALT: () => this.SUBRULE(this.EachStmt) },
 			{ ALT: () => this.SUBRULE(this.ForStmt) },
-//			{ ALT: () => this.SUBRULE(this.WhileStmt) },
+			{ ALT: () => this.SUBRULE(this.WhileStmt) },
 		]);
 	});
 
@@ -122,6 +122,12 @@ class CstParser extends BaseCstParser {
 			{ ALT: () => this.CONSUME(Token.To) },
 		]),
 		this.SUBRULE1(this.Expression);
+		this.SUBRULE(this.Block);
+	});
+
+	WhileStmt = this.RULE("WhileStmt", () => {
+		this.CONSUME(Token.AtWhile);
+		this.SUBRULE(this.Expression);
 		this.SUBRULE(this.Block);
 	});
 

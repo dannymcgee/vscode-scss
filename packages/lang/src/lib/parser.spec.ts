@@ -152,6 +152,13 @@ describe("Parser", () => {
 		expect(result).toMatchSnapshot("with 'to' keyword");
 	});
 
+	it("parses @while statements", () => {
+		const input = `@while true {}`;
+		const result = parser.parse(input);
+
+		expect(result).toMatchSnapshot();
+	});
+
 	it("parses blocks with optional final semicolon", () => {
 		const withSemi = `
 		{

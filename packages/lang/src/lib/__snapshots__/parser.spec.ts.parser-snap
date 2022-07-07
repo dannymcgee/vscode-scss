@@ -204,6 +204,27 @@ exports[`Parser parses @if statements 1`] = `
 )
 `;
 
+exports[`Parser parses @while statements 1`] = `
+(SourceFile
+  (UniversalStmt
+    (FlowControlStmt
+      (WhileStmt
+        "@while" (AtWhile (1:(0,6))),
+        (Expression
+          (Literal
+            "true" (BoolLiteral (1:(7,11))),
+          ),
+        ),
+        (Block
+          "{" (LBrace (1:(12,13))),
+          "}" (RBrace (1:(13,14))),
+        ),
+      ),
+    ),
+  ),
+)
+`;
+
 exports[`Parser parses Sass directive statements 1`] = `
 (SourceFile
   (UniversalStmt
